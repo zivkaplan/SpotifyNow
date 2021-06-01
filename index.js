@@ -96,13 +96,13 @@ app.get('/now', async (req, res) => {
     //send post request to Spotify
     const response = await getToken(req.query.code);
     token = response.data;
-    console.log(response);
+    // console.log(response);
     if (response.status !== 200) {
         res.send('Auth failed!');
     }
     const userDetails = await getDetails(token);
-    // console.log(userDetails);
-    res.render('main');
+    console.log(userDetails);
+    res.render('main', { user: userDetails.data });
 });
 
 app.get('/', (req, res) => {
@@ -112,4 +112,3 @@ app.get('/', (req, res) => {
 app.listen(port, (req, res) => {
     console.log('Server up');
 });
-// GET https://api.spotify.com/v1/users/{user_id}
