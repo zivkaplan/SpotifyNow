@@ -28,9 +28,9 @@ const spotifyAuth = (function () {
     const clientSecret = process.env.CLIENT_SECRET;
     const redirectUri = `http://localhost:${port}/now`;
 
-    // const authorizationHeaderString =
-    //     'Basic ' +
-    //     Buffer.from(clientId + ':' + clientSecret).toString('base64');
+    const authorizationHeaderString =
+        'Basic ' +
+        Buffer.from(clientId + ':' + clientSecret).toString('base64');
 
     const authUrl = `${baseAuthUrl}?response_type=code&client_id=${clientId}&scope=${scopes.join(
         '%20'
@@ -40,22 +40,22 @@ const spotifyAuth = (function () {
         authUrl,
         tokenUrl,
         redirectUri,
+        authorizationHeaderString,
     };
 })();
 
-const getToken = async (code) => {
+const getToken = (code) => {
     return axios({
         method: 'post',
         url: spotifyAuth.tokenUrl,
         params: {
-            client_id: spotifyAuth.clientId,
-            client_secret: spotifyAuth.clientSecret,
             grant_type: 'authorization_code',
             code,
             redirect_uri: spotifyAuth.redirectUri,
         },
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            authorization: spotifyAuth.authorizationHeaderString,
         },
     })
         .then((response) => {
@@ -70,9 +70,9 @@ app.get('/login', (req, res) => {
     res.redirect(spotifyAuth.authUrl);
 });
 
-app.get('/now', (req, res) => {
+app.get('/now', async (req, res) => {
     //send post request to Spotify
-    const response = getToken(req.query.code);
+    const response = await getToken(req.query.code);
     console.log(response);
     res.send('OK');
 });
