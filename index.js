@@ -4,9 +4,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 const axios = require('axios');
 const express = require('express');
+const ejsMate = require('ejs-mate');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -66,6 +71,23 @@ const getToken = (code) => {
         });
 };
 
+const getDetails = (token) => {
+    return axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/me',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: 'Bearer ' + token.access_token,
+        },
+    })
+        .then((response) => {
+            return response;
+        })
+        .catch((e) => {
+            return e.response.data;
+        });
+};
+
 app.get('/login', (req, res) => {
     res.redirect(spotifyAuth.authUrl);
 });
@@ -73,14 +95,21 @@ app.get('/login', (req, res) => {
 app.get('/now', async (req, res) => {
     //send post request to Spotify
     const response = await getToken(req.query.code);
+    token = response.data;
     console.log(response);
-    res.send('OK');
+    if (response.status !== 200) {
+        res.send('Auth failed!');
+    }
+    const userDetails = await getDetails(token);
+    // console.log(userDetails);
+    res.render('main');
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'));
+    res.render('home');
 });
 
 app.listen(port, (req, res) => {
     console.log('Server up');
 });
+// GET https://api.spotify.com/v1/users/{user_id}
