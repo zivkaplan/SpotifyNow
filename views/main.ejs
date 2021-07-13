@@ -7,29 +7,48 @@
 <ul class="search_results">
     <li>1</li>
 </ul>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     const $search = document.getElementById('search');
 
-    $search.addEventListener('change', (e) => {
-        fetch('https://api.spotify.com/v1/search', {
+    function getCookie(name) {
+        var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
+        return !!pair ? pair[1] : null;
+    }
+
+    $search.addEventListener('input', (e) => {
+        const url = new URL('https://api.spotify.com/v1/search');
+        const config = {
             method: 'GET',
-            mode: 'same-origin', // no-cors, *cors, same-origin
-            params: {
-                grant_type: 'authorization_code',
-            },
+            mode: 'cors', // no-cors, *cors, same-origin
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                authorization: getCookie('access_token'),
+                Authorization: `Bearer ${decodeURI(
+                    getCookie('access_token')
+                ).slice(1, -1)}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-        })
-            .then((response) => {
-                console.log(response);
-                // return response;
+        };
+        params = {
+            q: e.target.value,
+            type: 'track',
+        };
+
+        url.search = new URLSearchParams(params).toString();
+
+        fetch(url, config)
+            .then((response) => response.json())
+            .then((data) => {
+                data.tracks.items.map((track) => {
+                    console.log(
+                        track.name,
+                        track.album.name,
+                        track.album.artists[0].name
+                    );
+                });
             })
             .catch((e) => {
                 console.log(e);
-                // return e.response.data;
             });
     });
 </script>

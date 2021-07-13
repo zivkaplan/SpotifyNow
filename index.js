@@ -120,7 +120,7 @@ app.get('/now', async (req, res) => {
         res.send('Auth failed!');
     }
 
-    res.cookie('acces_token', JSON.stringify(token.access_token));
+    res.cookie('access_token', JSON.stringify(token.access_token));
     const userDetails = await getDetails(token);
     console.log(userDetails);
 
