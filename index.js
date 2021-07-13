@@ -4,17 +4,35 @@ if (process.env.NODE_ENV !== 'production') {
 
 const axios = require('axios');
 const express = require('express');
+const session = require('express-session');
 const ejsMate = require('ejs-mate');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+const appConfig = (function () {
+    const secret = process.env.SECRET || 'spotifyProject';
+    const sessionConfig = {
+        name: 'SessConnect',
+        secret: secret,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+            httpOnly: true,
+            // secure: true,
+        },
+    };
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+    app.engine('ejs', ejsMate);
+    app.set('view engine', 'ejs');
+    app.set('views', path.join(__dirname, 'views'));
+    app.use(session(sessionConfig));
+
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
+})();
 
 const spotifyAuth = (function () {
     const baseAuthUrl = 'https://accounts.spotify.com/authorize';
@@ -96,12 +114,16 @@ app.get('/now', async (req, res) => {
     //send post request to Spotify
     const response = await getToken(req.query.code);
     token = response.data;
-    // console.log(response);
+    console.log(token);
+
     if (response.status !== 200) {
         res.send('Auth failed!');
     }
+
+    res.cookie('acces_token', JSON.stringify(token.access_token));
     const userDetails = await getDetails(token);
     console.log(userDetails);
+
     res.render('main', { user: userDetails.data });
 });
 

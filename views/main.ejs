@@ -1,5 +1,35 @@
 <% layout('./boilerplate') -%>
 
-    <h1>Spotify Now</h1>
-    <h2>Hi <%= user.display_name %> </h2>
-    <input type="search" name="" id="search" placeholder="Search Songs/Albums">
+<h1>Spotify Now</h1>
+<h2>Hi <%= user.display_name %></h2>
+
+<input type="search" name="q" id="search" placeholder="Search Songs/Albums" />
+<ul class="search_results">
+    <li>1</li>
+</ul>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const $search = document.getElementById('search');
+
+    $search.addEventListener('change', (e) => {
+        fetch('https://api.spotify.com/v1/search', {
+            method: 'GET',
+            mode: 'same-origin', // no-cors, *cors, same-origin
+            params: {
+                grant_type: 'authorization_code',
+            },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                authorization: getCookie('access_token'),
+            },
+        })
+            .then((response) => {
+                console.log(response);
+                // return response;
+            })
+            .catch((e) => {
+                console.log(e);
+                // return e.response.data;
+            });
+    });
+</script>
