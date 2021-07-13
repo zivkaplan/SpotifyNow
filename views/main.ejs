@@ -4,9 +4,7 @@
 <h2>Hi <%= user.display_name %></h2>
 
 <input type="search" name="q" id="search" placeholder="Search Songs/Albums" />
-<ul class="search_results">
-    <li>1</li>
-</ul>
+<ul class="search_results"></ul>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     const $search = document.getElementById('search');
@@ -17,6 +15,10 @@
     }
 
     $search.addEventListener('input', (e) => {
+        if (!e.target.value) {
+            document.querySelector('ul').innerHTML = '';
+        }
+
         const url = new URL('https://api.spotify.com/v1/search');
         const config = {
             method: 'GET',
@@ -39,13 +41,11 @@
         fetch(url, config)
             .then((response) => response.json())
             .then((data) => {
-                data.tracks.items.map((track) => {
-                    console.log(
-                        track.name,
-                        track.album.name,
-                        track.album.artists[0].name
-                    );
+                const results = data.tracks.items.map((track) => {
+                    return `<li>${track.name}, ${track.album.name}, ${track.album.artists[0].name}</li>`;
                 });
+                console.log(results);
+                document.querySelector('ul').innerHTML = results.join('');
             })
             .catch((e) => {
                 console.log(e);
