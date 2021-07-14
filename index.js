@@ -2,13 +2,20 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+const User = require('./models/user');
 const axios = require('axios');
 const express = require('express');
 const session = require('express-session');
 const ejsMate = require('ejs-mate');
 const path = require('path');
 const app = express();
+const mainRouter = require('./routes/main');
+
 const port = process.env.PORT || 3000;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/spotify-now';
+
+const { mongooseConfig } = require('./config');
+mongooseConfig(dbUrl);
 
 const appConfig = (function () {
     const secret = process.env.SECRET || 'spotifyProject';
@@ -34,102 +41,8 @@ const appConfig = (function () {
     app.use(express.json());
 })();
 
-const spotifyAuth = (function () {
-    const baseAuthUrl = 'https://accounts.spotify.com/authorize';
-    const tokenUrl = 'https://accounts.spotify.com/api/token';
-    const scopes = [
-        'app-remote-control',
-        'streaming',
-        'playlist-modify-public',
-        'playlist-modify-private',
-        'playlist-read-private',
-        'playlist-read-collaborative',
-        'user-read-currently-playing',
-    ];
-
-    const clientId = process.env.CLIENT_ID;
-    const clientSecret = process.env.CLIENT_SECRET;
-    const redirectUri = `http://localhost:${port}/now`;
-
-    const authorizationHeaderString =
-        'Basic ' +
-        Buffer.from(clientId + ':' + clientSecret).toString('base64');
-
-    const authUrl = `${baseAuthUrl}?response_type=code&client_id=${clientId}&scope=${scopes.join(
-        '%20'
-    )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-
-    return {
-        authUrl,
-        tokenUrl,
-        redirectUri,
-        authorizationHeaderString,
-    };
-})();
-
-const getToken = (code) => {
-    return axios({
-        method: 'post',
-        url: spotifyAuth.tokenUrl,
-        params: {
-            grant_type: 'authorization_code',
-            code,
-            redirect_uri: spotifyAuth.redirectUri,
-        },
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            authorization: spotifyAuth.authorizationHeaderString,
-        },
-    })
-        .then((response) => {
-            return response;
-        })
-        .catch((e) => {
-            return e.response.data;
-        });
-};
-
-const getDetails = (token) => {
-    return axios({
-        method: 'get',
-        url: 'https://api.spotify.com/v1/me',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Bearer ' + token.access_token,
-        },
-    })
-        .then((response) => {
-            return response;
-        })
-        .catch((e) => {
-            return e.response.data;
-        });
-};
-
-app.get('/login', (req, res) => {
-    res.redirect(spotifyAuth.authUrl);
-});
-
-app.get('/now', async (req, res) => {
-    //send post request to Spotify
-    const response = await getToken(req.query.code);
-    token = response.data;
-    console.log(token);
-
-    if (response.status !== 200) {
-        res.redirect('/');
-    }
-
-    res.cookie('access_token', JSON.stringify(token.access_token));
-    const userDetails = await getDetails(token);
-    console.log(userDetails);
-
-    res.render('loggedin', { user: userDetails.data });
-});
-
-app.get('/', (req, res) => {
-    res.render('start');
-});
+// routes
+app.use('/', mainRouter);
 
 app.listen(port, (req, res) => {
     console.log('Server up');
