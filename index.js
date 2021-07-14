@@ -29,7 +29,7 @@ const appConfig = (function () {
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, 'views'));
     app.use(session(sessionConfig));
-
+    app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
 })();
@@ -117,18 +117,18 @@ app.get('/now', async (req, res) => {
     console.log(token);
 
     if (response.status !== 200) {
-        res.send('Auth failed!');
+        res.redirect('/');
     }
 
     res.cookie('access_token', JSON.stringify(token.access_token));
     const userDetails = await getDetails(token);
     console.log(userDetails);
 
-    res.render('main', { user: userDetails.data });
+    res.render('loggedin', { user: userDetails.data });
 });
 
 app.get('/', (req, res) => {
-    res.render('home');
+    res.render('start');
 });
 
 app.listen(port, (req, res) => {
