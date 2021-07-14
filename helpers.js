@@ -1,4 +1,5 @@
 const axios = require('axios');
+const User = require('./models/user');
 
 // module.exports.localStorageSpotify = {
 //     getAccessToken: function () {
@@ -25,7 +26,7 @@ const axios = require('axios');
 module.exports.getToken = (code, spotifyAuth) => {
     return axios({
         method: 'post',
-        url: spotifyAuth.tokenUrl,
+        url: 'https://accounts.spotify.com/api/token',
         params: {
             grant_type: 'authorization_code',
             code,
@@ -59,4 +60,29 @@ module.exports.getDetails = (token) => {
         .catch((e) => {
             return e.response.data;
         });
+};
+
+module.exports.searchTracks = (user, data) => {
+    const searchResults = axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/search',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + user.token.access_token,
+        },
+        params: {
+            q: data.q,
+            type: data.type,
+        },
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+
+    return searchResults ? searchResults : null;
 };

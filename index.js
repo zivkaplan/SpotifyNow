@@ -14,7 +14,7 @@ const mainRouter = require('./routes/main');
 const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/spotify-now';
 
-const { mongooseConfig } = require('./config');
+const { mongooseConfig } = require('./configs/mongooseConfig');
 mongooseConfig(dbUrl);
 
 const appConfig = (function () {
@@ -23,7 +23,7 @@ const appConfig = (function () {
         name: 'SessConnect',
         secret: secret,
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         cookie: {
             expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
             maxAge: 1000 * 60 * 60 * 24 * 7,
