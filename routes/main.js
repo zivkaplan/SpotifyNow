@@ -23,6 +23,7 @@ router.get('/login', (req, res) => {
 
 router.post('/search', async (req, res) => {
     const user = await User.findOne({ spotify_id: req.body.id });
+    if (!req.body.q) return;
     const searchResults = await searchTracks(user, req.body);
     res.send(searchResults);
 });
