@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     spotify_id: { type: String, required: true, unique: true },
-    image_url: { type: String, required: true, unique: true },
+    image_url: { type: String, required: false, unique: true },
     token: {
         access_token: {
             type: String,
@@ -30,4 +30,4 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
