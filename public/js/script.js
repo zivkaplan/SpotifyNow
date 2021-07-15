@@ -29,17 +29,14 @@ $search.addEventListener('input', (e) => {
     fetch(url, config)
         .then((response) => response.json())
         .then((data) => {
-            const results = data.tracks.items.map((track) => {
-                return `<li class="li_result">
-                <a class="trackHref" href="${track.uri}">
-                <div class="result_wrap">
-                <img class="albumArt" alt="${track.album.name}" src="${track.album.images[2].url}">
-                <span class="result trackName"> ${track.name}</span>
-                <span class="result artistName">${track.album.artists[0].name}</span>
-                <span class="result albumName">${track.album.name}</span>
-                </div></a></li>`;
+            const results = data.tracks.items.map((item) => {
+                return Track(item);
             });
-            document.querySelector('ul').innerHTML = results.join('');
+            document.querySelector('ul').innerHTML = '';
+            results.forEach((res) => {
+                res.addEventListener('click', addToQueue);
+                document.querySelector('ul').append(res);
+            });
         })
         .catch((e) => {
             console.log(e);
@@ -62,7 +59,10 @@ $getAlbumsBtn.addEventListener('click', (e) => {
     fetch(url, config)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
+            const results = data.items.map((item) => {
+                return Album(item);
+            });
+            document.querySelector('ul').innerHTML = results.join('');
         })
         .catch((e) => {
             console.log(e);
@@ -85,9 +85,36 @@ $getPlaylistsBtn.addEventListener('click', (e) => {
     fetch(url, config)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
+            const results = data.items.map((item) => {
+                return Playlist(item);
+            });
+            document.querySelector('ul').innerHTML = results.join('');
         })
         .catch((e) => {
             console.log(e);
         });
 });
+
+const addToQueue = (e) => {
+    const url = new URL('http://localhost:3000/addToQueue');
+    const config = {
+        method: 'post',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: getCookie('SpotifyAccess').toString(),
+            uri: e.target.dataset.uri,
+        }),
+    };
+    fetch(url, config)
+        .then((response) => {
+            if (response.status === 200) {
+                alert('Track added to Queue');
+            }
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+};

@@ -38,10 +38,6 @@ ul.search_results {
     font-weight: 100;
 }
 
-.albumArt {
-    padding: 10px;
-}
-
 .li_result {
     display: flex;
     align-items: center;
@@ -58,9 +54,20 @@ ul.search_results {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
 }
 
-.trackHref {
-    text-decoration: none;
-    color: black;
+.result_wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.playlistArt,
+.albumArt {
+    max-width: 80%;
 }

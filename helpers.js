@@ -1,28 +1,6 @@
 const axios = require('axios');
 const User = require('./models/user');
 
-// module.exports.localStorageSpotify = {
-//     getAccessToken: function () {
-//         var expires = 0 + localStorage.getItem('pa_expires', '0');
-//         if (new Date().getTime() > expires) {
-//             return '';
-//         }
-//         var token = localStorage.getItem('pa_token', '');
-//         return token;
-//     },
-//     setAccessToken: function (token, expires_in) {
-//         localStorage.setItem('pa_token', token);
-//         localStorage.setItem('pa_expires', new Date().getTime() + expires_in);
-//     },
-//     getUsername: function () {
-//         var username = localStorage.getItem('pa_username', '');
-//         return username;
-//     },
-//     setUsername: function (username) {
-//         localStorage.setItem('pa_username', username);
-//     },
-// };
-
 module.exports.getToken = (code, spotifyAuth) => {
     return axios({
         method: 'post',
@@ -125,4 +103,28 @@ module.exports.getPlaylists = (user) => {
             return e;
         });
     return playlists ? playlists : null;
+};
+
+module.exports.addToQueue = (user, data) => {
+    const response = axios({
+        method: 'post',
+        url: 'https://api.spotify.com/v1/me/player/queue',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + user.token.access_token,
+        },
+        params: {
+            uri: data.uri,
+        },
+    })
+        .then((response) => {
+            return response;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+
+    return response ? response : null;
 };

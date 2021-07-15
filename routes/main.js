@@ -11,6 +11,7 @@ const {
     searchTracks,
     getAlbums,
     getPlaylists,
+    addToQueue,
 } = require('../helpers');
 spotifyAuth = spotifyAuthConfig();
 const router = express.Router();
@@ -34,17 +35,25 @@ router.post('/search', async (req, res) => {
     res.send(searchResults);
 });
 
+router.post('/addToQueue', async (req, res) => {
+    const user = await User.findOne({ spotify_id: req.body.id });
+    if (!req.body.id) return;
+    const response = await addToQueue(user, req.body);
+    if (!response.status === 204) {
+        res.send('Eror. try again');
+    }
+    res.sendStatus(200);
+});
+
 router.get('/albums', async (req, res) => {
     const user = await User.findOne({ spotify_id: req.query.id });
     const albums = await getAlbums(user);
-    // console.log(albums);
     res.send(albums);
 });
 
 router.get('/playlists', async (req, res) => {
     const user = await User.findOne({ spotify_id: req.query.id });
     const playlists = await getPlaylists(user);
-    // console.log(playlists);
     res.send(playlists);
 });
 
