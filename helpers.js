@@ -86,3 +86,43 @@ module.exports.searchTracks = (user, data) => {
 
     return searchResults ? searchResults : null;
 };
+
+module.exports.getAlbums = (user) => {
+    const albums = axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/me/albums',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + user.token.access_token,
+        },
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+    return albums ? albums : null;
+};
+
+module.exports.getPlaylists = (user) => {
+    const playlists = axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/me/playlists',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + user.token.access_token,
+        },
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+    return playlists ? playlists : null;
+};

@@ -1,4 +1,6 @@
 const $search = document.getElementById('search');
+const $getAlbumsBtn = document.querySelector('button.getAlbums');
+const $getPlaylistsBtn = document.querySelector('button.getPlaylists');
 
 function getCookie(name) {
     var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
@@ -38,6 +40,52 @@ $search.addEventListener('input', (e) => {
                 </div></a></li>`;
             });
             document.querySelector('ul').innerHTML = results.join('');
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+});
+
+$getAlbumsBtn.addEventListener('click', (e) => {
+    const url = new URL('http://localhost:3000/albums');
+    const config = {
+        method: 'get',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    };
+    params = {
+        id: getCookie('SpotifyAccess').toString(),
+    };
+    url.search = new URLSearchParams(params);
+    fetch(url, config)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+});
+
+$getPlaylistsBtn.addEventListener('click', (e) => {
+    const url = new URL('http://localhost:3000/playlists');
+    const config = {
+        method: 'get',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    };
+    params = {
+        id: getCookie('SpotifyAccess').toString(),
+    };
+    url.search = new URLSearchParams(params);
+    fetch(url, config)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
         })
         .catch((e) => {
             console.log(e);

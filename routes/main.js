@@ -5,7 +5,13 @@ const express = require('express');
 const session = require('express-session');
 const ejsMate = require('ejs-mate');
 const { spotifyAuthConfig } = require('../configs/spotifyAuthConfig');
-const { getToken, getDetails, searchTracks } = require('../helpers');
+const {
+    getToken,
+    getDetails,
+    searchTracks,
+    getAlbums,
+    getPlaylists,
+} = require('../helpers');
 spotifyAuth = spotifyAuthConfig();
 const router = express.Router();
 const { validateTokenExpiration } = require('../middleware');
@@ -26,6 +32,20 @@ router.post('/search', async (req, res) => {
     if (!req.body.q) return;
     const searchResults = await searchTracks(user, req.body);
     res.send(searchResults);
+});
+
+router.get('/albums', async (req, res) => {
+    const user = await User.findOne({ spotify_id: req.query.id });
+    const albums = await getAlbums(user);
+    // console.log(albums);
+    res.send(albums);
+});
+
+router.get('/playlists', async (req, res) => {
+    const user = await User.findOne({ spotify_id: req.query.id });
+    const playlists = await getPlaylists(user);
+    // console.log(playlists);
+    res.send(playlists);
 });
 
 router.get('/now', async (req, res) => {

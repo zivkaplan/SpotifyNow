@@ -9,6 +9,7 @@ module.exports.spotifyAuthConfig = () => {
         'playlist-read-private',
         'playlist-read-collaborative',
         'user-read-currently-playing',
+        'user-library-read',
     ];
 
     const clientId = process.env.CLIENT_ID;
