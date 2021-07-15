@@ -40,7 +40,7 @@ module.exports.getDetails = (token) => {
 };
 
 module.exports.searchTracks = (user, data) => {
-    const searchResults = axios({
+    return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/search',
         headers: {
@@ -60,12 +60,10 @@ module.exports.searchTracks = (user, data) => {
             console.log(e.response);
             return e;
         });
-
-    return searchResults ? searchResults : null;
 };
 
 module.exports.getAlbums = (user) => {
-    const albums = axios({
+    return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me/albums',
         headers: {
@@ -81,11 +79,10 @@ module.exports.getAlbums = (user) => {
             console.log(e.response);
             return e;
         });
-    return albums ? albums : null;
 };
 
 module.exports.getPlaylists = (user) => {
-    const playlists = axios({
+    return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me/playlists',
         headers: {
@@ -101,11 +98,10 @@ module.exports.getPlaylists = (user) => {
             console.log(e.response);
             return e;
         });
-    return playlists ? playlists : null;
 };
 
 module.exports.addToQueue = (user, data) => {
-    const response = axios({
+    return axios({
         method: 'post',
         url: 'https://api.spotify.com/v1/me/player/queue',
         headers: {
@@ -124,6 +120,4 @@ module.exports.addToQueue = (user, data) => {
             console.log(e.response);
             return e;
         });
-
-    return response ? response : null;
 };

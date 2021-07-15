@@ -15,12 +15,21 @@ const {
 } = require('../helpers');
 spotifyAuth = spotifyAuthConfig();
 const router = express.Router();
-const { validateTokenExpiration } = require('../middleware');
+const { validateAccessToken, refreshAccessToken } = require('../middleware');
 
 // router.use('/', async (req, res, next) => {
-//     // if ()
+//     if (!req.body.id) next();
 //     const user = await User.findOne({ spotify_id: req.body.id });
-//     validateTokenExpiration();
+//     if (user) {
+//         const isValid = validateAccessToken(user, spotifyAuth);
+//         if (!isValid) {
+//             const newToken = await refreshAccessToken(user, spotifyAuth);
+//             await User.findOneAndUpdate(
+//                 { spotify_id: req.body.id },
+//                 { token: { access_token: newToken } }
+//             );
+//         }
+//     }
 //     next();
 // });
 
@@ -65,46 +74,36 @@ router.get('/now', async (req, res) => {
     if (response.status !== 200) {
         res.send('error');
     }
-    const userDetails = await getDetails(token);
+    const userData = await getDetails(token);
     // console.log(token);
-    // console.log(userDetails.data);
-    let user;
-    try {
-        user = await User.findOneAndUpdate(
-            { spotify_id: userDetails.data.id },
-            {
-                username: userDetails.data.display_name,
-                spotify_id: userDetails.data.id,
-                image_url: userDetails.data.images[0].url,
-                token: {
-                    access_token: token.access_token,
-                    token_type: token.token_type,
-                    expires_in: Date.now() + token.expires_in,
-                    refresh_token: token.refresh_token,
-                    scope: token.scope,
-                },
-            }
-        );
-    } catch (e) {
-        console.log(e);
-        user = new User({
-            username: userDetails.data.display_name,
-            spotify_id: userDetails.data.id,
-            image_url: userDetails.data.images[0].url,
-            token: {
-                access_token: token.access_token,
-                token_type: token.token_type,
-                expires_in: Date.now() + token.expires_in,
-                refresh_token: token.refresh_token,
-                scope: token.scope,
-            },
-        });
+    // console.log(userData.data);
+    const userDetails = {
+        username: userData.data.display_name,
+        spotify_id: userData.data.id,
+        image_url: userData.data.images[0].url
+            ? userData.data.images[0].url
+            : null,
+        token: {
+            access_token: token.access_token,
+            token_type: token.token_type,
+            expires_in: Date.now() + token.expires_in,
+            refresh_token: token.refresh_token,
+            scope: token.scope,
+        },
+    };
+
+    let user = await User.findOneAndUpdate(
+        { spotify_id: userData.data.id },
+        userDetails
+    );
+    if (!user) {
+        user = new User({ userDetails });
         await user.save();
     }
     // console.log(user);
 
     res.cookie('SpotifyAccess', user.spotify_id);
-    res.render('loggedin', { user: userDetails.data });
+    res.render('loggedin', { user: userData.data });
 });
 router.get('/', (req, res) => {
     res.render('start');

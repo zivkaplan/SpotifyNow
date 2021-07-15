@@ -1,14 +1,18 @@
 const axios = require('axios');
-const User = require('./models/user');
 
-module.exports.validateTokenExpiration = (user, spotifyAuth) => {
-    if (Date.now() < user.token.expires_in) return;
+module.exports.validateAccessToken = (user, spotifyAuth) => {
+    console.log(Date.now(), user.token.expires_in);
+    if (Date.now() < user.token.expires_in) return true;
+    return false;
+};
+
+module.exports.refreshAccessToken = (user, spotifyAuth) => {
     return axios({
         method: 'post',
         url: 'https://accounts.spotify.com/api/token',
         params: {
             grant_type: 'authorization_code',
-            code: refreshToken,
+            code: user.token.refresh_token,
             redirect_uri: spotifyAuth.redirectUri,
         },
         headers: {
