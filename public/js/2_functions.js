@@ -1,12 +1,4 @@
-const $search = document.getElementById('search');
-const $getAlbumsBtn = document.querySelector('button.getAlbums');
-const $getPlaylistsBtn = document.querySelector('button.getPlaylists');
-
-$search.addEventListener('input', (e) => {
-    if (!e.target.value) {
-        document.querySelector('ul').innerHTML = '';
-    }
-
+const searchTrack = (e) => {
     const url = new URL('http://localhost:3000/search');
     const config = {
         method: 'POST',
@@ -35,9 +27,9 @@ $search.addEventListener('input', (e) => {
         .catch((e) => {
             console.log(e);
         });
-});
+};
 
-$getAlbumsBtn.addEventListener('click', (e) => {
+const getAlbums = (e) => {
     const url = new URL('http://localhost:3000/albums');
     const config = {
         method: 'get',
@@ -57,9 +49,9 @@ $getAlbumsBtn.addEventListener('click', (e) => {
         .catch((e) => {
             console.log(e);
         });
-});
+};
 
-$getPlaylistsBtn.addEventListener('click', (e) => {
+const getPlaylists = (e) => {
     const url = new URL('http://localhost:3000/playlists');
     const config = {
         method: 'get',
@@ -79,7 +71,7 @@ $getPlaylistsBtn.addEventListener('click', (e) => {
         .catch((e) => {
             console.log(e);
         });
-});
+};
 
 const addToQueue = (e) => {
     const url = new URL('http://localhost:3000/addToQueue');
