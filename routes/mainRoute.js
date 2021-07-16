@@ -12,7 +12,8 @@ const {
     getAlbums,
     getPlaylists,
     addToQueue,
-} = require('../helpers');
+    loadNext,
+} = require('../controllers/mainController');
 spotifyAuth = spotifyAuthConfig();
 const router = express.Router();
 const { validateAccessToken, refreshAccessToken } = require('../middleware');
@@ -40,22 +41,22 @@ router.get('/login', (req, res) => {
 router.post('/search', async (req, res) => {
     if (!req.body.q || !req.session.SpotifyAccess) return;
     const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
-    const searchResults = await searchTracks(user, req.body);
-    res.send(searchResults);
+    const response = await searchTracks(user, req.body);
+    res.send(response);
 });
 
 router.get('/albums', async (req, res) => {
     if (!req.session.SpotifyAccess) return;
     const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
-    const albums = await getAlbums(user);
-    res.send(albums);
+    const response = await getAlbums(user);
+    res.send(response);
 });
 
 router.get('/playlists', async (req, res) => {
     if (!req.session.SpotifyAccess) return;
     const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
-    const playlists = await getPlaylists(user);
-    res.send(playlists);
+    const response = await getPlaylists(user);
+    res.send(response);
 });
 
 router.get('/addToQueue', async (req, res) => {
@@ -67,6 +68,14 @@ router.get('/addToQueue', async (req, res) => {
         res.send('Eror. try again');
     }
     res.sendStatus(200);
+});
+
+router.get('/next', async (req, res) => {
+    if (!req.session.SpotifyAccess || !req.query.next) return;
+    const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
+    const response = await loadNext(user, req.query.next);
+    console.log(response);
+    res.send(response);
 });
 
 router.get('/now', async (req, res) => {

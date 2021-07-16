@@ -9,7 +9,7 @@ const session = require('express-session');
 const ejsMate = require('ejs-mate');
 const path = require('path');
 const app = express();
-const mainRouter = require('./routes/main');
+const mainRouter = require('./routes/mainRoute');
 
 const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/spotify-now';

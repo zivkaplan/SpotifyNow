@@ -121,3 +121,22 @@ module.exports.addToQueue = (user, uri) => {
             return e;
         });
 };
+
+module.exports.loadNext = (user, url) => {
+    return axios({
+        method: 'get',
+        url: url,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + user.token.access_token,
+        },
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+};
