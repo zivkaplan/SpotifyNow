@@ -100,7 +100,7 @@ module.exports.getPlaylists = (user) => {
         });
 };
 
-module.exports.addToQueue = (user, data) => {
+module.exports.addToQueue = (user, uri) => {
     return axios({
         method: 'post',
         url: 'https://api.spotify.com/v1/me/player/queue',
@@ -110,7 +110,7 @@ module.exports.addToQueue = (user, data) => {
             Authorization: 'Bearer ' + user.token.access_token,
         },
         params: {
-            uri: data.uri,
+            uri,
         },
     })
         .then((response) => {

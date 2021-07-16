@@ -2,11 +2,6 @@ const $search = document.getElementById('search');
 const $getAlbumsBtn = document.querySelector('button.getAlbums');
 const $getPlaylistsBtn = document.querySelector('button.getPlaylists');
 
-function getCookie(name) {
-    var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
-    return !!pair ? pair[1] : null;
-}
-
 $search.addEventListener('input', (e) => {
     if (!e.target.value) {
         document.querySelector('ul').innerHTML = '';
@@ -20,7 +15,6 @@ $search.addEventListener('input', (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            id: getCookie('SpotifyAccess'),
             q: e.target.value,
             type: 'track,artist',
         }),
@@ -52,10 +46,6 @@ $getAlbumsBtn.addEventListener('click', (e) => {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     };
-    params = {
-        id: getCookie('SpotifyAccess').toString(),
-    };
-    url.search = new URLSearchParams(params);
     fetch(url, config)
         .then((response) => response.json())
         .then((data) => {
@@ -78,10 +68,6 @@ $getPlaylistsBtn.addEventListener('click', (e) => {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     };
-    params = {
-        id: getCookie('SpotifyAccess').toString(),
-    };
-    url.search = new URLSearchParams(params);
     fetch(url, config)
         .then((response) => response.json())
         .then((data) => {
@@ -98,16 +84,15 @@ $getPlaylistsBtn.addEventListener('click', (e) => {
 const addToQueue = (e) => {
     const url = new URL('http://localhost:3000/addToQueue');
     const config = {
-        method: 'post',
+        method: 'get',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            id: getCookie('SpotifyAccess').toString(),
-            uri: e.target.dataset.uri,
-        }),
     };
+    const params = { uri: e.target.dataset.uri }.toString();
+    url.search = new URLSearchParams(params);
+
     fetch(url, config)
         .then((response) => {
             if (response.status === 200) {

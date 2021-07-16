@@ -38,32 +38,34 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
-    const user = await User.findOne({ spotify_id: req.body.id });
-    if (!req.body.q) return;
+    if (!req.body.q || !req.session.SpotifyAccess) return;
+    const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
     const searchResults = await searchTracks(user, req.body);
     res.send(searchResults);
 });
 
-router.post('/addToQueue', async (req, res) => {
-    const user = await User.findOne({ spotify_id: req.body.id });
-    if (!req.body.id) return;
-    const response = await addToQueue(user, req.body);
-    if (!response.status === 204) {
-        res.send('Eror. try again');
-    }
-    res.sendStatus(200);
-});
-
 router.get('/albums', async (req, res) => {
-    const user = await User.findOne({ spotify_id: req.query.id });
+    if (!req.session.SpotifyAccess) return;
+    const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
     const albums = await getAlbums(user);
     res.send(albums);
 });
 
 router.get('/playlists', async (req, res) => {
-    const user = await User.findOne({ spotify_id: req.query.id });
+    if (!req.session.SpotifyAccess) return;
+    const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
     const playlists = await getPlaylists(user);
     res.send(playlists);
+});
+
+router.get('/addToQueue', async (req, res) => {
+    const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
+    if (!req.query.uri) return;
+    const response = await addToQueue(user, req.query.uri);
+    if (!response.status === 204) {
+        res.send('Eror. try again');
+    }
+    res.sendStatus(200);
 });
 
 router.get('/now', async (req, res) => {
@@ -102,9 +104,10 @@ router.get('/now', async (req, res) => {
     }
     // console.log(user);
 
-    res.cookie('SpotifyAccess', user.spotify_id);
+    req.session.SpotifyAccess = user.spotify_id;
     res.render('loggedin', { user: userData.data });
 });
+
 router.get('/', (req, res) => {
     res.render('start');
 });
