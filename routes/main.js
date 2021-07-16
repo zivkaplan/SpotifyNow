@@ -59,6 +59,7 @@ router.get('/playlists', async (req, res) => {
 });
 
 router.get('/addToQueue', async (req, res) => {
+    if (!req.session.SpotifyAccess) return;
     const user = await User.findOne({ spotify_id: req.session.SpotifyAccess });
     if (!req.query.uri) return;
     const response = await addToQueue(user, req.query.uri);

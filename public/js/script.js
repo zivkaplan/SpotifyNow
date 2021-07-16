@@ -87,10 +87,10 @@ const addToQueue = (e) => {
         method: 'get',
         mode: 'cors',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
     };
-    const params = { uri: e.target.dataset.uri }.toString();
+    const params = { uri: e.target.dataset.uri };
     url.search = new URLSearchParams(params);
 
     fetch(url, config)
