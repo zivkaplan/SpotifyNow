@@ -65,7 +65,7 @@ router.get('/addToQueue', async (req, res) => {
     if (!req.query.uri) return;
     const response = await addToQueue(user, req.query.uri);
     if (!response.status === 204) {
-        res.send('Eror. try again');
+        res.send('Error. try again');
     }
     res.sendStatus(200);
 });
@@ -84,7 +84,7 @@ router.get('/now', async (req, res) => {
     token = response.data;
 
     if (response.status !== 200) {
-        res.send('error');
+        res.redirect('/');
     }
     const userData = await getDetails(token);
     // console.log(token);

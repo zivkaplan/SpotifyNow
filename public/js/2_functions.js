@@ -115,7 +115,7 @@ const loadNext = async (type, next) => {
     };
 
     const results = await requestNext();
-    console.log(results);
+
     let newNext;
     if (type === 'search') {
         displayTracks(results);

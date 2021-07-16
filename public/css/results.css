@@ -71,3 +71,24 @@ ul.search_results {
 .albumArt {
     max-width: 80%;
 }
+
+.loadMoreBtn {
+    color: #fff;
+    background-color: #19e68c;
+    border-radius: 500px;
+    font-size: inherit;
+    padding: 14px 32px;
+    border: none;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.loadMoreBtn:hover {
+    transform: scale(1.04);
+}
+
+button:disabled,
+button[disabled] {
+    background-color: #0f8a55;
+    color: #666666;
+}
