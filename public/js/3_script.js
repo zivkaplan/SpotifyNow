@@ -1,13 +1,13 @@
 const $search = document.getElementById('search');
 const $getAlbumsBtn = document.querySelector('button.getAlbums');
 const $getPlaylistsBtn = document.querySelector('button.getPlaylists');
-const $loadMoreBtn = document.querySelector('.loadMoreBtn');
+const $floatingBarsG = document.querySelector('#floatingBarsG ');
 const lastReq = {
     search: false,
     albums: false,
     playlists: false,
     next: null,
-    lastScrollHeight: 0,
+    isFecthing: false,
 };
 
 $search.addEventListener('input', async (e) => {
@@ -31,31 +31,22 @@ $getPlaylistsBtn.addEventListener('click', async (e) => {
     setLastReq(lastReq, 'playlists', results.next);
 });
 
-$loadMoreBtn.addEventListener('click', async (e) => {
-    if (lastReq.next === null) return;
-    $loadMoreBtn.disabled = true;
+window.addEventListener('scroll', async (e) => {
+    const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+    if (
+        lastReq.next === null ||
+        lastReq.isFecthing ||
+        scrollTop + clientHeight <= scrollHeight - 5
+    )
+        return;
+    lastReq.isFecthing = true;
+    $floatingBarsG.style.display = 'block';
     const type = Object.keys(lastReq).find((el) => lastReq[el] === true);
     lastReq.next = await loadNext(type, lastReq.next);
-    $loadMoreBtn.disabled = false;
-    console.log(lastReq.next);
-    if (lastReq.next === null) {
-        console.log('end of info');
-    }
-});
+    lastReq.isFecthing = false;
+    $floatingBarsG.style.display = 'none';
 
-// window.addEventListener('scroll', async (e) => {
-//     if (
-//         lastReq.next !== null &&
-//         document.documentElement.scrollHeight !== lastReq.lastScrollHeight &&
-//         window.scrollY + window.innerHeight >=
-//             document.documentElement.scrollHeight
-//     ) {
-//         lastReq.lastScrollHeight = document.documentElement.scrollHeight;
-//         const type = Object.keys(lastReq).find((el) => lastReq[el] === true);
-//         lastReq.next = await loadNext(type, lastReq.next);
-//         console.log(lastReq.next);
-//         if (lastReq.next === null) {
-//             console.log('end of info');
-//         }
-//     }
-// });
+    // if (lastReq.next === null) {
+    //     console.log('end of info');
+    // }
+});
