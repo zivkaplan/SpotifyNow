@@ -93,7 +93,7 @@ router.get('/now', async (req, res) => {
     const userDetails = {
         username: userData.data.display_name,
         spotify_id: userData.data.id,
-        image_url: userData.data.images[0].url
+        image_url: userData.data.images?.[0]?.url
             ? userData.data.images[0].url
             : null,
         token: {
@@ -104,7 +104,7 @@ router.get('/now', async (req, res) => {
             scope: userToken.scope,
         },
     };
-    console.log(userDetails);
+    // console.log(userDetails);
     let user = await User.findOneAndUpdate(
         { spotify_id: userData.data.id },
         userDetails
