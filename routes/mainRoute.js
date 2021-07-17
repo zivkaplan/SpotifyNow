@@ -81,13 +81,14 @@ router.get('/next', async (req, res) => {
 router.get('/now', async (req, res) => {
     //send post request to Spotify
     const response = await getToken(req.query.code, spotifyAuth);
-    token = response.data;
+
+    const userToken = response.data;
 
     if (response.status !== 200) {
         res.redirect('/');
     }
-    const userData = await getDetails(token);
-    // console.log(token);
+    const userData = await getDetails(userToken);
+    // console.log(userToken);
     // console.log(userData.data);
     const userDetails = {
         username: userData.data.display_name,
@@ -96,20 +97,20 @@ router.get('/now', async (req, res) => {
             ? userData.data.images[0].url
             : null,
         token: {
-            access_token: token.access_token,
-            token_type: token.token_type,
-            expires_in: Date.now() + token.expires_in,
-            refresh_token: token.refresh_token,
-            scope: token.scope,
+            access_token: userToken.access_token,
+            token_type: userToken.token_type,
+            expires_in: Date.now() + userToken.expires_in,
+            refresh_token: userToken.refresh_token,
+            scope: userToken.scope,
         },
     };
-
+    console.log(userDetails);
     let user = await User.findOneAndUpdate(
         { spotify_id: userData.data.id },
         userDetails
     );
     if (!user) {
-        user = new User({ userDetails });
+        user = new User(userDetails);
         await user.save();
     }
     // console.log(user);
