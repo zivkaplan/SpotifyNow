@@ -6,6 +6,7 @@ body {
     background-color: var(--main_color);
     font-family: 'Lato', sans-serif;
     text-align: center;
+    margin: 0;
 }
 
 button {
@@ -26,7 +27,30 @@ h1 {
     font-size: 48px;
 }
 
+header {
+    background-color: #000000;
+    text-align: left;
+}
+
 .now {
     font-family: 'Yellowtail', cursive;
     text-transform: uppercase;
+}
+
+.logo {
+    font-size: 30px;
+    color: var(--main_color);
+    /* align vertical */
+}
+
+footer {
+    font-size: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: var(--main_color);
+    background-color: #000;
+    text-align: center;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }

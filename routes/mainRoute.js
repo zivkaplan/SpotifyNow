@@ -114,7 +114,6 @@ router.get('/now', async (req, res) => {
         await user.save();
     }
     // console.log(user);
-
     req.session.SpotifyAccess = user.spotify_id;
     res.render('loggedin', { user: userData.data });
 });
