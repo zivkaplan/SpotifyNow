@@ -1,4 +1,5 @@
 const axios = require('axios');
+const User = require('../models/user');
 
 module.exports.getToken = (code, spotifyAuth) => {
     return axios({
@@ -139,4 +140,14 @@ module.exports.loadNext = (user, url) => {
             console.log(e.response);
             return e;
         });
+};
+
+module.exports.isLoggedIn = async (req) => {
+    const currentTime = Date.now();
+    console.log(req.session);
+    if (!req.session.spotifyAccess || !req.session.expires_in) return false;
+    return (
+        req.session.expires_in + currentTime > currentTime &&
+        (await User.exists({ spotify_id: req.session.spotifyAccess }))
+    );
 };
