@@ -22,13 +22,13 @@ module.exports.getToken = (code, spotifyAuth) => {
         });
 };
 
-module.exports.getDetails = (token) => {
+module.exports.getDetails = (access_token) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Bearer ' + token.access_token,
+            Authorization: 'Bearer ' + access_token,
         },
     })
         .then((response) => {

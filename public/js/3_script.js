@@ -18,17 +18,37 @@ $search.addEventListener('input', async (e) => {
 });
 
 $getAlbumsBtn.addEventListener('click', async (e) => {
-    document.querySelector('ul').innerHTML = '';
-    const results = await getAlbums(e);
-    displayAlbums(results);
-    setLastReq(lastReq, 'albums', results.next);
+    try {
+        $getAlbumsBtn.disabled = true;
+        $getAlbumsBtn.innerText = 'loading...';
+        document.querySelector('ul').innerHTML = '';
+        const results = await getAlbums(e);
+        displayAlbums(results);
+        setLastReq(lastReq, 'albums', results.next);
+        $getAlbumsBtn.disabled = false;
+        $getAlbumsBtn.innerText = 'get Albums';
+    } catch (e) {
+        console.log(e);
+        $getAlbumsBtn.disabled = false;
+        $getAlbumsBtn.innerText = 'get Albums';
+    }
 });
 
 $getPlaylistsBtn.addEventListener('click', async (e) => {
-    document.querySelector('ul').innerHTML = '';
-    const results = await getPlaylists(e);
-    displayPlaylists(results);
-    setLastReq(lastReq, 'playlists', results.next);
+    try {
+        $getPlaylistsBtn.disabled = true;
+        $getPlaylistsBtn.innerText = 'loading';
+        document.querySelector('ul').innerHTML = '';
+        const results = await getPlaylists(e);
+        displayPlaylists(results);
+        setLastReq(lastReq, 'playlists', results.next);
+        $getPlaylistsBtn.disabled = false;
+        $getPlaylistsBtn.innerText = 'Get Playlists';
+    } catch (e) {
+        console.log(e);
+        $getPlaylistsBtn.disabled = false;
+        $getPlaylistsBtn.innerText = 'Get Playlists';
+    }
 });
 
 window.addEventListener('scroll', async (e) => {

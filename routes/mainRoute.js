@@ -16,7 +16,11 @@ const {
 } = require('../controllers/mainController');
 spotifyAuth = spotifyAuthConfig();
 const router = express.Router();
-const { validateAccessToken, refreshAccessToken } = require('../middleware');
+// const {
+//     validateAccessToken,
+//     refreshAccessToken,
+//     isLoggedIn,
+// } = require('../middleware');
 
 // router.use('/', async (req, res, next) => {
 //     if (!req.body.id) next();
@@ -83,7 +87,7 @@ router.get('/now', async (req, res) => {
     try {
         const response = await getToken(req.query.code, spotifyAuth);
         const userToken = response.data;
-        const userData = await getDetails(userToken);
+        const userData = await getDetails(userToken.access_token);
         // console.log(userToken);
         // console.log(userData.data);
         const userDetails = {
@@ -112,8 +116,8 @@ router.get('/now', async (req, res) => {
         // console.log(user);
         req.session.SpotifyAccess = user.spotify_id;
         res.render('loggedin', { user: userData.data });
-    } catch {
-        console.log('catch block');
+    } catch (e) {
+        console.log(e);
         res.redirect('/');
     }
 });
