@@ -144,7 +144,6 @@ module.exports.loadNext = (user, url) => {
 
 module.exports.isLoggedIn = async (req) => {
     const currentTime = Date.now();
-    console.log(req.session);
     if (!req.session.spotifyAccess || !req.session.expires_in) return false;
     return (
         req.session.expires_in + currentTime > currentTime &&
