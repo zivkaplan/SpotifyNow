@@ -39,14 +39,17 @@ window.addEventListener('scroll', async (e) => {
         scrollTop + clientHeight <= scrollHeight - 5
     )
         return;
-    lastReq.isFecthing = true;
-    $floatingBarsG.style.display = 'block';
-    const type = Object.keys(lastReq).find((el) => lastReq[el] === true);
-    lastReq.next = await loadNext(type, lastReq.next);
-    lastReq.isFecthing = false;
-    $floatingBarsG.style.display = 'none';
-
-    // if (lastReq.next === null) {
-    //     console.log('end of info');
-    // }
+    const NextUrlBackup = lastReq.next;
+    try {
+        lastReq.isFecthing = true;
+        $floatingBarsG.style.display = 'block';
+        const type = Object.keys(lastReq).find((el) => lastReq[el] === true);
+        lastReq.next = await loadNext(type, lastReq.next);
+        lastReq.isFecthing = false;
+        $floatingBarsG.style.display = 'none';
+    } catch {
+        lastReq.isFecthing = false;
+        lastReq.next = NextUrlBackup;
+        $floatingBarsG.style.display = 'none';
+    }
 });
