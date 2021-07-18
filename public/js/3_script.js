@@ -62,14 +62,14 @@ window.addEventListener('scroll', async (e) => {
     const NextUrlBackup = lastReq.next;
     try {
         lastReq.isFecthing = true;
-        $floatingBarsG.style.display = 'block';
+        $floatingBarsG.style.transform = 'scale(1)';
         const type = Object.keys(lastReq).find((el) => lastReq[el] === true);
         lastReq.next = await loadNext(type, lastReq.next);
         lastReq.isFecthing = false;
-        $floatingBarsG.style.display = 'none';
+        $floatingBarsG.style.transform = 'scale(0)';
     } catch {
         lastReq.isFecthing = false;
         lastReq.next = NextUrlBackup;
-        $floatingBarsG.style.display = 'none';
+        $floatingBarsG.style.transform = 'scale(0)';
     }
 });

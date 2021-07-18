@@ -1,6 +1,6 @@
 #floatingBarsG {
     position: relative;
-    display: none;
+    transform: scale(0);
     width: 60px;
     height: 75px;
     margin: auto;
