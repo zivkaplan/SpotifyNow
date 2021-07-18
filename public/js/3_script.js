@@ -56,7 +56,7 @@ window.addEventListener('scroll', async (e) => {
     if (
         lastReq.next === null ||
         lastReq.isFecthing ||
-        scrollTop + clientHeight <= scrollHeight - 5
+        scrollTop + clientHeight <= scrollHeight - 100
     )
         return;
     const NextUrlBackup = lastReq.next;
