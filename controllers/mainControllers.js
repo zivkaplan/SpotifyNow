@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
+
 const express = require('express');
 const { spotifyAuthConfig } = require('../configs/spotifyAuthConfig');
 const {
@@ -14,55 +15,42 @@ const {
 } = require('../controllers/functions');
 spotifyAuth = spotifyAuthConfig();
 
-// const {
-//     validateAccessToken,
-//     refreshAccessToken,
-// } = require('../middleware');
-
-// router.use('/', async (req, res, next) => {
-//     if (!req.body.id) next();
-//     const user = await User.findOne({ spotify_id: req.body.id });
-//     if (user) {
-//         const isValid = validateAccessToken(user, spotifyAuth);
-//         if (!isValid) {
-//             const newToken = await refreshAccessToken(user, spotifyAuth);
-//             await User.findOneAndUpdate(
-//                 { spotify_id: req.body.id },
-//                 { token: { access_token: newToken } }
-//             );
-//         }
-//     }
-//     next();
-// });
-
 module.exports.loginToSpotify = (req, res) => {
     res.redirect(spotifyAuth.authUrl);
 };
 
 module.exports.getSearchResults = async (req, res) => {
     if (!req.body.q || !req.session.spotifyAccess) return;
-    const user = await User.findOne({ spotify_id: req.session.spotifyAccess });
+    const user = await User.findOne({
+        spotify_id: req.session.spotifyAccess,
+    });
     const response = await searchTracks(user, req.body);
     res.send(response);
 };
 
 module.exports.getAlbums = async (req, res) => {
     if (!req.session.spotifyAccess) return;
-    const user = await User.findOne({ spotify_id: req.session.spotifyAccess });
+    const user = await User.findOne({
+        spotify_id: req.session.spotifyAccess,
+    });
     const response = await albumsRequest(user);
     res.send(response);
 };
 
 module.exports.getPlaylists = async (req, res) => {
     if (!req.session.spotifyAccess) return;
-    const user = await User.findOne({ spotify_id: req.session.spotifyAccess });
+    const user = await User.findOne({
+        spotify_id: req.session.spotifyAccess,
+    });
     const response = await playlistsRequest(user);
     res.send(response);
 };
 
 module.exports.addToQueue = async (req, res) => {
     if (!req.session.spotifyAccess) return;
-    const user = await User.findOne({ spotify_id: req.session.spotifyAccess });
+    const user = await User.findOne({
+        spotify_id: req.session.spotifyAccess,
+    });
     if (!req.query.uri) return;
     const response = await addToQueueRequest(user, req.query.uri);
     if (!response.status === 204) {
@@ -73,7 +61,9 @@ module.exports.addToQueue = async (req, res) => {
 
 module.exports.loadNext = async (req, res) => {
     if (!req.session.spotifyAccess || !req.query.next) return;
-    const user = await User.findOne({ spotify_id: req.session.spotifyAccess });
+    const user = await User.findOne({
+        spotify_id: req.session.spotifyAccess,
+    });
     const response = await loadNextReqeust(user, req.query.next);
     // console.log(response);
     res.send(response);
@@ -115,10 +105,12 @@ module.exports.thisOne = async (req, res) => {
                     scope: userToken.scope,
                 },
             };
+
             // console.log(userDetails);
             let user = await User.findOneAndUpdate(
                 { spotify_id: userData.data.id },
-                userDetails
+                userDetails,
+                { new: true }
             );
             if (!user) {
                 user = new User(userDetails);
