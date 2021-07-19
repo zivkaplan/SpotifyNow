@@ -15,7 +15,7 @@ module.exports.spotifyAuthConfig = () => {
 
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
-    const redirectUri = `http://localhost:3000/now`;
+    const redirectUri = `http://localhost:3000/`;
 
     const authorizationHeaderString =
         'Basic ' +

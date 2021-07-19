@@ -1,13 +1,23 @@
 <% layout('./boilerplate') -%>
 
 <link rel="stylesheet" href="/css/results.css" />
+<link rel="stylesheet" href="/css/loader.css" />
 <h1>Spotify Now</h1>
-<h2>Hi <%= user.display_name %></h2>
+<h2>Hi <%= user.username %></h2>
 <button class="getAlbums">Get Albums</button>
 <button class="getPlaylists">Get Playlists</button>
 <input type="search" name="q" id="search" placeholder="Search Songs" />
 <ul class="search_results"></ul>
-<button class="loadMoreBtn">Load More</button>
+<div id="floatingBarsG">
+    <div class="blockG" id="rotateG_01"></div>
+    <div class="blockG" id="rotateG_02"></div>
+    <div class="blockG" id="rotateG_03"></div>
+    <div class="blockG" id="rotateG_04"></div>
+    <div class="blockG" id="rotateG_05"></div>
+    <div class="blockG" id="rotateG_06"></div>
+    <div class="blockG" id="rotateG_07"></div>
+    <div class="blockG" id="rotateG_08"></div>
+</div>
 <script src="/js/1_components.js"></script>
 <script src="/js/2_functions.js"></script>
 <script src="/js/3_script.js"></script>

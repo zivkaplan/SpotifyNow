@@ -1,0 +1,85 @@
+#floatingBarsG {
+    position: relative;
+    transform: scale(0);
+    width: 60px;
+    height: 75px;
+    margin: auto;
+}
+
+.blockG {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 10px;
+    height: 23px;
+    border-radius: 8px 8px 0 0;
+    transform: scale(0.4);
+    animation-name: fadeG;
+    animation-duration: 0.832s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+#rotateG_01 {
+    left: 0;
+    top: 27px;
+    animation-delay: 0.3095s;
+    transform: rotate(-90deg);
+}
+
+#rotateG_02 {
+    left: 8px;
+    top: 10px;
+    animation-delay: 0.416s;
+    transform: rotate(-45deg);
+}
+
+#rotateG_03 {
+    left: 25px;
+    top: 3px;
+    animation-delay: 0.5225s;
+    transform: rotate(0deg);
+}
+
+#rotateG_04 {
+    right: 8px;
+    top: 10px;
+    animation-delay: 0.619s;
+    transform: rotate(45deg);
+}
+
+#rotateG_05 {
+    right: 0;
+    top: 27px;
+    animation-delay: 0.7255s;
+    transform: rotate(90deg);
+}
+
+#rotateG_06 {
+    right: 8px;
+    bottom: 7px;
+    animation-delay: 0.832s;
+    transform: rotate(135deg);
+}
+
+#rotateG_07 {
+    bottom: 0;
+    left: 25px;
+    animation-delay: 0.9385s;
+    transform: rotate(180deg);
+}
+#rotateG_08 {
+    left: 8px;
+    bottom: 7px;
+    animation-delay: 1.035s;
+    transform: rotate(-135deg);
+}
+
+@keyframes fadeG {
+    0% {
+        background-color: rgb(0, 0, 0);
+    }
+
+    100% {
+        background-color: rgb(255, 255, 255);
+    }
+}

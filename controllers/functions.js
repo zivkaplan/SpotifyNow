@@ -1,6 +1,7 @@
 const axios = require('axios');
+const User = require('../models/user');
 
-module.exports.getToken = (code, spotifyAuth) => {
+module.exports.tokenRequest = (code, spotifyAuth) => {
     return axios({
         method: 'post',
         url: 'https://accounts.spotify.com/api/token',
@@ -22,13 +23,13 @@ module.exports.getToken = (code, spotifyAuth) => {
         });
 };
 
-module.exports.getDetails = (token) => {
+module.exports.detailsRequest = (access_token) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Bearer ' + token.access_token,
+            Authorization: 'Bearer ' + access_token,
         },
     })
         .then((response) => {
@@ -62,7 +63,7 @@ module.exports.searchTracks = (user, data) => {
         });
 };
 
-module.exports.getAlbums = (user) => {
+module.exports.albumsRequest = (user) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me/albums',
@@ -81,7 +82,7 @@ module.exports.getAlbums = (user) => {
         });
 };
 
-module.exports.getPlaylists = (user) => {
+module.exports.playlistsRequest = (user) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me/playlists',
@@ -100,7 +101,7 @@ module.exports.getPlaylists = (user) => {
         });
 };
 
-module.exports.addToQueue = (user, uri) => {
+module.exports.addToQueueRequest = (user, uri) => {
     return axios({
         method: 'post',
         url: 'https://api.spotify.com/v1/me/player/queue',
@@ -122,7 +123,7 @@ module.exports.addToQueue = (user, uri) => {
         });
 };
 
-module.exports.loadNext = (user, url) => {
+module.exports.loadNextReqeust = (user, url) => {
     return axios({
         method: 'get',
         url: url,
@@ -139,4 +140,13 @@ module.exports.loadNext = (user, url) => {
             console.log(e.response);
             return e;
         });
+};
+
+module.exports.isLoggedIn = async (req) => {
+    const currentTime = Date.now();
+    if (!req.session.spotifyAccess || !req.session.expires_in) return false;
+    return (
+        req.session.expires_in + currentTime > currentTime &&
+        (await User.exists({ spotify_id: req.session.spotifyAccess }))
+    );
 };
