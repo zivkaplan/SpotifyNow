@@ -1,7 +1,7 @@
 const axios = require('axios');
 const User = require('../models/user');
 
-module.exports.getToken = (code, spotifyAuth) => {
+module.exports.tokenRequest = (code, spotifyAuth) => {
     return axios({
         method: 'post',
         url: 'https://accounts.spotify.com/api/token',
@@ -23,7 +23,7 @@ module.exports.getToken = (code, spotifyAuth) => {
         });
 };
 
-module.exports.getDetails = (access_token) => {
+module.exports.detailsRequest = (access_token) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me',
@@ -63,7 +63,7 @@ module.exports.searchTracks = (user, data) => {
         });
 };
 
-module.exports.getAlbums = (user) => {
+module.exports.albumsRequest = (user) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me/albums',
@@ -82,7 +82,7 @@ module.exports.getAlbums = (user) => {
         });
 };
 
-module.exports.getPlaylists = (user) => {
+module.exports.playlistsRequest = (user) => {
     return axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/me/playlists',
@@ -101,7 +101,7 @@ module.exports.getPlaylists = (user) => {
         });
 };
 
-module.exports.addToQueue = (user, uri) => {
+module.exports.addToQueueRequest = (user, uri) => {
     return axios({
         method: 'post',
         url: 'https://api.spotify.com/v1/me/player/queue',
@@ -123,7 +123,7 @@ module.exports.addToQueue = (user, uri) => {
         });
 };
 
-module.exports.loadNext = (user, url) => {
+module.exports.loadNextReqeust = (user, url) => {
     return axios({
         method: 'get',
         url: url,
