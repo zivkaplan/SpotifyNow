@@ -141,12 +141,3 @@ module.exports.loadNextReqeust = (user, url) => {
             return e;
         });
 };
-
-module.exports.isLoggedIn = async (req) => {
-    const currentTime = Date.now();
-    if (!req.session.spotifyAccess || !req.session.expires_in) return false;
-    return (
-        req.session.expires_in + currentTime > currentTime &&
-        (await User.exists({ spotify_id: req.session.spotifyAccess }))
-    );
-};

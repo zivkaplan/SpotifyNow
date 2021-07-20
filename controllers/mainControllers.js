@@ -11,7 +11,6 @@ const {
     playlistsRequest,
     addToQueueRequest,
     loadNextReqeust,
-    logoutFromSpotify,
 } = require('../controllers/functions');
 spotifyAuth = spotifyAuthConfig();
 
@@ -72,30 +71,6 @@ module.exports.loadNext = async (req, res) => {
     const response = await loadNextReqeust(user, req.query.next);
     // console.log(response);
     res.send(response);
-};
-
-module.exports.isAuthenticated = async (req, res, next) => {
-    try {
-        if (
-            !req.session.firstLogin ||
-            (req.session.sessionKey &&
-                req.session.expires_in &&
-                req.session.expires_in > Date.now() &&
-                Boolean(
-                    await User.countDocuments({
-                        sessionKey: req.session.sessionKey,
-                    })
-                ))
-        ) {
-            next();
-        } else {
-            res.redirect('/login');
-        }
-    } catch (e) {
-        console.log(e);
-        res.send(e.message);
-        // res.redirect('/login');
-    }
 };
 
 module.exports.loggedInPage = async (req, res) => {

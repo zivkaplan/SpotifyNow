@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
-
+const { isAuthenticated } = require('../middleware');
 const mainControllers = require('../controllers/mainControllers');
 const router = express.Router();
 
@@ -18,6 +18,6 @@ router.get('/addToQueue', mainControllers.addToQueue);
 
 router.get('/next', mainControllers.loadNext);
 
-router.get('/', mainControllers.isAuthenticated, mainControllers.loggedInPage);
+router.get('/', isAuthenticated, mainControllers.loggedInPage);
 
 module.exports = router;

@@ -1,6 +1,6 @@
-// const express = require('express');
+const express = require('express');
+const User = require('./models/user');
 // const axios = require('axios');
-// const User = require('./models/user');
 
 // module.exports.validateAccessToken = (user, spotifyAuth) => {
 //     console.log(Date.now(), user.token.expires_in);
@@ -29,3 +29,27 @@
 //             return e.response.data;
 //         });
 // };
+
+module.exports.isAuthenticated = async (req, res, next) => {
+    try {
+        if (
+            !req.session.firstLogin ||
+            (req.session.sessionKey &&
+                req.session.expires_in &&
+                req.session.expires_in > Date.now() &&
+                Boolean(
+                    await User.countDocuments({
+                        sessionKey: req.session.sessionKey,
+                    })
+                ))
+        ) {
+            next();
+        } else {
+            res.redirect('/login');
+        }
+    } catch (e) {
+        console.log(e);
+        res.send(e.message);
+        // res.redirect('/login');
+    }
+};
