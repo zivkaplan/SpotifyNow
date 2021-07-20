@@ -11,6 +11,7 @@ const {
     playlistsRequest,
     addToQueueRequest,
     loadNextReqeust,
+    logoutFromSpotify,
 } = require('../controllers/functions');
 spotifyAuth = spotifyAuthConfig();
 

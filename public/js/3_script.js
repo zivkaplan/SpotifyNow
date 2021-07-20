@@ -76,23 +76,12 @@ window.addEventListener('scroll', async (e) => {
     }
 });
 
-$logoutBtn.addEventListener('click', (e) => {
+$logoutBtn.addEventListener('click', async (e) => {
     const spotifyLogoutWindow = window.open(
         'https://accounts.spotify.com/en/logout',
         'Spotify Logout',
         'width=700,height=500,top=40,left=40'
     );
+
     setTimeout(() => spotifyLogoutWindow.close(), 2000);
-
-    // const url = new URL('https://localhost://3000/logout');
-    // const config = {
-    //     method: 'get',
-    //     mode: 'cors',
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    // },
-
-    // const response = await fetch(url, config);
-    // console.log(response.json())
 });
