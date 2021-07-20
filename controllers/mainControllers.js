@@ -102,9 +102,7 @@ module.exports.loggedInPage = async (req, res) => {
             }
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
-            console.log(response);
-            if (response.status !== 200) {
-            }
+
             const userToken = response.data;
             const userData = await detailsRequest(userToken.access_token);
 
