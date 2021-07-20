@@ -96,7 +96,7 @@ module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
         if (!req.session.firstLogin) {
-            //check if the user logegd in and redirected from spotify
+            //check if the user logged in and was redirected from spotify
             if (!req.query.code) {
                 return res.render('start');
             }
