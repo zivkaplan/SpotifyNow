@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     spotify_id: { type: String, required: true, unique: true },
     image_url: { type: String },
-    currentSession: { type: String },
+    sessionKey: { type: String },
     token: {
         access_token: {
             type: String,

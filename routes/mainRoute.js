@@ -16,6 +16,6 @@ router.get('/addToQueue', mainControllers.addToQueue);
 
 router.get('/next', mainControllers.loadNext);
 
-router.get('/', mainControllers.thisOne);
+router.get('/', mainControllers.isAuthenticated, mainControllers.loggedInPage);
 
 module.exports = router;

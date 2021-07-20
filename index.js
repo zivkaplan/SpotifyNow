@@ -6,6 +6,7 @@ const User = require('./models/user');
 const axios = require('axios');
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const ejsMate = require('ejs-mate');
 const path = require('path');
 const app = express();
@@ -13,12 +14,12 @@ const mainRouter = require('./routes/mainRoute');
 
 const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/spotify-now';
+const secret = process.env.SECRET || 'spotifyProject';
 
 const { mongooseConfig } = require('./configs/mongooseConfig');
 mongooseConfig(dbUrl);
 
 const appConfig = (function () {
-    const secret = process.env.SECRET || 'spotifyProject';
     const sessionConfig = {
         name: 'SessConnect',
         secret: secret,
@@ -30,6 +31,13 @@ const appConfig = (function () {
             httpOnly: true,
             // secure: true,
         },
+        store: MongoStore.create({
+            mongoUrl: dbUrl,
+            touchAfter: 24 * 60 * 60,
+            crypto: {
+                secret: secret,
+            },
+        }),
     };
 
     app.engine('ejs', ejsMate);
