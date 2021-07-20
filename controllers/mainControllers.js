@@ -96,11 +96,13 @@ module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
         if (!req.session.firstLogin) {
+            if (!req.query.code) {
+                return res.render('start');
+            }
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
-
+            console.log(response);
             if (response.status !== 200) {
-                return res.render('start');
             }
             const userToken = response.data;
             const userData = await detailsRequest(userToken.access_token);
