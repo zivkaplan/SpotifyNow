@@ -1,7 +1,9 @@
 const $search = document.getElementById('search');
 const $getAlbumsBtn = document.querySelector('button.getAlbums');
 const $getPlaylistsBtn = document.querySelector('button.getPlaylists');
-const $floatingBarsG = document.querySelector('#floatingBarsG ');
+const $logoutBtn = document.querySelector('.logout');
+const $floatingBarsG = document.querySelector('#floatingBarsG');
+
 const lastReq = {
     search: false,
     albums: false,
@@ -72,4 +74,25 @@ window.addEventListener('scroll', async (e) => {
         lastReq.next = NextUrlBackup;
         $floatingBarsG.style.transform = 'scale(0)';
     }
+});
+
+$logoutBtn.addEventListener('click', (e) => {
+    const spotifyLogoutWindow = window.open(
+        'https://accounts.spotify.com/en/logout',
+        'Spotify Logout',
+        'width=700,height=500,top=40,left=40'
+    );
+    setTimeout(() => spotifyLogoutWindow.close(), 2000);
+
+    // const url = new URL('https://localhost://3000/logout');
+    // const config = {
+    //     method: 'get',
+    //     mode: 'cors',
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    // },
+
+    // const response = await fetch(url, config);
+    // console.log(response.json())
 });

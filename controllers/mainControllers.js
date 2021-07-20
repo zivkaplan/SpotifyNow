@@ -18,6 +18,11 @@ module.exports.loginToSpotify = (req, res) => {
     res.redirect(spotifyAuth.authUrl);
 };
 
+module.exports.logout = async (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
+};
+
 module.exports.getSearchResults = async (req, res) => {
     if (!req.body.q || !req.session.sessionKey) return;
     const user = await User.findOne({
@@ -98,7 +103,7 @@ module.exports.loggedInPage = async (req, res) => {
         if (!req.session.firstLogin) {
             //check if the user logged in and was redirected from spotify
             if (!req.query.code) {
-                return res.render('start');
+                return res.render('loginPage');
             }
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
@@ -141,6 +146,6 @@ module.exports.loggedInPage = async (req, res) => {
         res.render('loggedin', { user });
     } catch (e) {
         console.log(e);
-        res.render('start');
+        res.render('loginPage');
     }
 };

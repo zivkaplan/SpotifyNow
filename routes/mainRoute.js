@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/login', mainControllers.loginToSpotify);
 
+router.get('/logout', mainControllers.logout);
+
 router.post('/search', mainControllers.getSearchResults);
 
 router.get('/albums', mainControllers.getAlbums);
