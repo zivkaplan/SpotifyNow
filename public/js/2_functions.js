@@ -15,7 +15,8 @@ const searchTrack = async (e) => {
         },
         body: JSON.stringify({
             q: e.target.value,
-            type: 'track',
+            type: document.querySelector('input[name="searchType"]:checked')
+                .value,
         }),
     };
 

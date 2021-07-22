@@ -29,9 +29,8 @@ module.exports.isAuthenticated = async (req, res, next) => {
 
 module.exports.validateAccessToken = async (req, res, next) => {
     try {
-        console.log(req.session.expires_in, Date.now() + 12000);
         if (
-            req.session.firstLogin &&
+            req.session.activeSession &&
             req.session.sessionKey &&
             req.session.expires_in &&
             req.session.expires_in <= Date.now() + 120000
@@ -42,7 +41,7 @@ module.exports.validateAccessToken = async (req, res, next) => {
         next();
     } catch (e) {
         console.log(e);
-        res.redirect('/');
+        res.send('validate error');
     }
 };
 
@@ -53,13 +52,16 @@ const updateAccessToken = async (req) => {
         });
         if (!user) return;
         const response = await refreshAccessToken(user, spotifyAuth);
-        user.token.access_token = response.data.access_token;
-        user.token.expires_in = Date.now() + response.data.expires_in * 1000;
-        user.token.scope = response.data.scope;
-        user.token.refresh_token =
-            response.data.refresh_token || user.token.refresh_token;
+        if (response.status === 200) {
+            user.token.access_token = response.data.access_token;
+            user.token.expires_in =
+                Date.now() + response.data.expires_in * 1000;
+            user.token.scope = response.data.scope;
+            user.token.refresh_token =
+                response.data.refresh_token || user.token.refresh_token;
 
-        return await user.save();
+            return await user.save();
+        }
     } catch (e) {
         console.log(e);
         return e;

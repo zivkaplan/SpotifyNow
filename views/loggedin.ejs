@@ -8,7 +8,13 @@
 <h2>Hi <%= user.username %></h2>
 <button class="getAlbums">Get Albums</button>
 <button class="getPlaylists">Get Playlists</button>
-<input type="search" name="q" id="search" placeholder="Search Songs" />
+<input type="search" name="q" id="search" placeholder="Search" />
+<div>
+    <input type="radio" name="searchType" id="track" value="track" checked />
+    <label for="tracks">Tracks</label>
+    <input type="radio" name="searchType" id="artist" value="artist" />
+    <label for="artists">Artists</label>
+</div>
 <ul class="search_results"></ul>
 
 <div id="floatingBarsG">

@@ -8,18 +8,18 @@ router.use(validateAccessToken);
 
 router.get('/login', mainControllers.loginToSpotify);
 
-router.get('/logout', mainControllers.logout);
+router.get('/logout', isAuthenticated, mainControllers.logout);
 
-router.post('/search', mainControllers.getSearchResults);
+router.post('/search', isAuthenticated, mainControllers.getSearchResults);
 
-router.get('/albums', mainControllers.getAlbums);
+router.get('/albums', isAuthenticated, mainControllers.getAlbums);
 
-router.get('/playlists', mainControllers.getPlaylists);
+router.get('/playlists', isAuthenticated, mainControllers.getPlaylists);
 
-router.get('/addToQueue', mainControllers.addToQueue);
+router.get('/addToQueue', isAuthenticated, mainControllers.addToQueue);
 
-router.get('/next', mainControllers.loadNext);
+router.get('/next', isAuthenticated, mainControllers.loadNext);
 
-router.get('/', isAuthenticated, mainControllers.loggedInPage);
+router.get('/', mainControllers.loggedInPage);
 
 module.exports = router;

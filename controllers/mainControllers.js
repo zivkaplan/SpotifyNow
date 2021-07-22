@@ -73,8 +73,6 @@ module.exports.loadNext = async (req, res) => {
     res.send(response);
 };
 
-module.exports.loadExistingUser = {};
-
 module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
