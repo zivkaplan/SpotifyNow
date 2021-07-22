@@ -1,5 +1,5 @@
 const axios = require('axios');
-const User = require('../models/user');
+const User = require('./models/user');
 
 module.exports.tokenRequest = (code, spotifyAuth) => {
     return axios({
@@ -19,7 +19,8 @@ module.exports.tokenRequest = (code, spotifyAuth) => {
             return response;
         })
         .catch((e) => {
-            return e.response.data;
+            console.log(e.response);
+            return e;
         });
 };
 
@@ -36,7 +37,8 @@ module.exports.detailsRequest = (access_token) => {
             return response;
         })
         .catch((e) => {
-            return e.response.data;
+            console.log(e.response);
+            return e;
         });
 };
 
@@ -135,6 +137,28 @@ module.exports.loadNextReqeust = (user, url) => {
     })
         .then((response) => {
             return response.data;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+};
+
+module.exports.refreshAccessToken = (user, spotifyAuth) => {
+    return axios({
+        method: 'post',
+        url: 'https://accounts.spotify.com/api/token',
+        params: {
+            grant_type: 'refresh_token',
+            refresh_token: user.token.refresh_token,
+        },
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: spotifyAuth.authorizationHeaderString,
+        },
+    })
+        .then((response) => {
+            return response;
         })
         .catch((e) => {
             console.log(e.response);

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
-const { spotifyAuthConfig } = require('../configs/spotifyAuthConfig');
 const {
     tokenRequest,
     detailsRequest,
@@ -11,7 +10,8 @@ const {
     playlistsRequest,
     addToQueueRequest,
     loadNextReqeust,
-} = require('../controllers/functions');
+} = require('../httpRequests');
+const { spotifyAuthConfig } = require('../configs/spotifyAuthConfig');
 spotifyAuth = spotifyAuthConfig();
 
 module.exports.loginToSpotify = (req, res) => {
@@ -73,17 +73,23 @@ module.exports.loadNext = async (req, res) => {
     res.send(response);
 };
 
+module.exports.loadExistingUser = {};
+
 module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
-        if (!req.session.firstLogin) {
-            //check if the user logged in and was redirected from spotify
-            if (!req.query.code) {
-                return res.render('loginPage');
-            }
+        if (!req.query.code && !req.session.activeSession) {
+            //if the user was not logged in and was not redirected from spotify
+            return res.render('loginPage');
+        } else if (req.session.activeSession) {
+            // user already logged in - session active
+            user = await User.findOne({
+                sessionKey: req.session.sessionKey,
+            });
+        } else {
+            //first login in to session user logged in and redirected from spofity
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
-
             const userToken = response.data;
             const userData = await detailsRequest(userToken.access_token);
 
@@ -108,16 +114,15 @@ module.exports.loggedInPage = async (req, res) => {
                 userDetails,
                 { new: true }
             );
+
             if (!user) {
                 user = new User(userDetails);
                 await user.save();
             }
 
-            req.session.firstLogin = true;
+            req.session.activeSession = true;
             req.session.sessionKey = userDetails.sessionKey;
             req.session.expires_in = user.token.expires_in;
-        } else {
-            user = await User.findOne({ sessionKey: req.session.sessionKey });
         }
         res.render('loggedin', { user });
     } catch (e) {

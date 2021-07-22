@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const { isAuthenticated } = require('../middleware');
+const { isAuthenticated, validateAccessToken } = require('../middleware');
 const mainControllers = require('../controllers/mainControllers');
 const router = express.Router();
+
+router.use(validateAccessToken);
 
 router.get('/login', mainControllers.loginToSpotify);
 
