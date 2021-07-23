@@ -3,6 +3,9 @@ const $getAlbumsBtn = document.querySelector('button.getAlbums');
 const $getPlaylistsBtn = document.querySelector('button.getPlaylists');
 const $logoutBtn = document.querySelector('.logout');
 const $floatingBarsG = document.querySelector('#floatingBarsG');
+const $searchTypeRadioBtns = document.querySelectorAll(
+    'input[name="searchType"]'
+);
 
 const lastReq = {
     search: false,
@@ -11,13 +14,25 @@ const lastReq = {
     next: null,
     isFecthing: false,
 };
-
-$search.addEventListener('input', async (e) => {
+const newSearch = async (e) => {
     document.querySelector('ul').innerHTML = '';
-    const results = await searchTrack(e);
-    displayTracks(results);
-    setLastReq(lastReq, 'search', results.tracks.next);
+    const selectedSearchType = document.querySelector(
+        'input[name="searchType"]:checked'
+    ).value;
+    const results = await searchSpotify($search.value, selectedSearchType);
+    if (selectedSearchType === 'artist') {
+        displayArtists(results);
+    } else {
+        displayTracks(results);
+    }
+    setLastReq(lastReq, 'search', results[selectedSearchType + 's'].next);
+};
+
+$searchTypeRadioBtns.forEach((btn) => {
+    btn.addEventListener('change', newSearch);
 });
+
+$search.addEventListener('input', newSearch);
 
 $getAlbumsBtn.addEventListener('click', async (e) => {
     try {

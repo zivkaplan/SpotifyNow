@@ -45,3 +45,11 @@ const Playlist = (item) => {
     <span class="result artistName">${item.name}</span>
     </div></li>`;
 };
+
+const Artist = (item) => {
+    return `<li class="li_result">
+        <div class="result_wrap" data-uri="${item.uri}">
+        <img class="artistPhoto" alt="${item.name} artist photo" src="${item.images?.[0]?.url}">
+        <span class="result artistName">${item.name}</span>
+        </div></li>`;
+};

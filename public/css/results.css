@@ -76,8 +76,14 @@ ul.search_results {
 }
 
 .playlistArt,
-.albumArt {
+.albumArt,
+.artistPhoto {
     max-width: 80%;
+    max-height: 100%;
+}
+
+.artistPhoto {
+    border-radius: 100%;
 }
 
 .loadMoreBtn {

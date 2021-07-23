@@ -5,7 +5,7 @@ const setLastReq = (lastReq, value, next) => {
     lastReq.next = next;
 };
 
-const searchTrack = async (e) => {
+const searchSpotify = async (q, type) => {
     const url = new URL('http://localhost:3000/search');
     const config = {
         method: 'POST',
@@ -14,9 +14,8 @@ const searchTrack = async (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            q: e.target.value,
-            type: document.querySelector('input[name="searchType"]:checked')
-                .value,
+            q,
+            type,
         }),
     };
 
@@ -74,6 +73,13 @@ const displayPlaylists = (data) => {
     document.querySelector('ul').innerHTML += results.join('');
 };
 
+const displayArtists = (data) => {
+    const results = data.artists.items.map((item) => {
+        return Artist(item);
+    });
+    document.querySelector('ul').innerHTML += results.join('');
+};
+
 const addToQueue = (e) => {
     const url = new URL('http://localhost:3000/addToQueue');
     const config = {
@@ -118,15 +124,21 @@ const loadNext = async (type, next) => {
     const results = await requestNext();
 
     let newNext;
-    if (type === 'search') {
-        displayTracks(results);
-        newNext = results.tracks.next;
-    } else if (type === 'albums') {
+
+    if (type === 'albums') {
         newNext = results.next;
         displayAlbums(results);
     } else if (type === 'playlists') {
         displayPlaylists(results);
         newNext = results.next;
+    } else if (type === 'search') {
+        if (results.artists) {
+            displayArtists(results);
+            newNext = results.artists.next;
+        } else {
+            displayTracks(results);
+            newNext = results.tracks.next;
+        }
     }
     return newNext;
 };
