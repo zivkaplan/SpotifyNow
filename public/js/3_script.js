@@ -6,6 +6,10 @@ const $floatingBarsG = document.querySelector('#floatingBarsG');
 const $searchTypeRadioBtns = document.querySelectorAll(
     'input[name="searchType"]'
 );
+const $spotifyEmbededPlayer = document.querySelector('.spotifyEmbededPlayer');
+const $spotifyEmbededPlayerWrapper = document.querySelector(
+    '.spotifyEmbededPlayerWrapper'
+);
 
 const lastReq = {
     search: false,
@@ -13,19 +17,6 @@ const lastReq = {
     playlists: false,
     next: null,
     isFecthing: false,
-};
-const newSearch = async (e) => {
-    document.querySelector('ul').innerHTML = '';
-    const selectedSearchType = document.querySelector(
-        'input[name="searchType"]:checked'
-    ).value;
-    const results = await searchSpotify($search.value, selectedSearchType);
-    if (selectedSearchType === 'artist') {
-        displayArtists(results);
-    } else {
-        displayTracks(results);
-    }
-    setLastReq(lastReq, 'search', results[selectedSearchType + 's'].next);
 };
 
 $searchTypeRadioBtns.forEach((btn) => {
@@ -102,4 +93,10 @@ $logoutBtn.addEventListener('click', async (e) => {
         spotifyLogoutWindow.close();
         location.assign('http://localhost:3000/logout');
     }, 2000).then();
+});
+
+$arrow.addEventListener('click', (e) => {
+    console.log(1);
+    // if (!e.target.closest('div')) return;
+    // $spotifyEmbededPlayer.classList.toggle('openList');
 });

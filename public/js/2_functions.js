@@ -54,7 +54,13 @@ const displayTracks = (data) => {
         return Track(item);
     });
     results.forEach((res) => {
-        res.addEventListener('click', addToQueue);
+        res.addEventListener('click', (e) => {
+            $spotifyEmbededPlayer.setAttribute(
+                'src',
+                'https://open.spotify.com/embed/track/' +
+                    e.target.dataset.uri.split(':')[2]
+            );
+        });
         document.querySelector('ul').append(res);
     });
 };
@@ -63,21 +69,48 @@ const displayAlbums = (data) => {
     const results = data.items.map((item) => {
         return Album(item);
     });
-    document.querySelector('ul').innerHTML += results.join('');
+    results.forEach((res) => {
+        res.addEventListener('click', (e) => {
+            $spotifyEmbededPlayer.setAttribute(
+                'src',
+                'https://open.spotify.com/embed/album/' +
+                    e.target.dataset.uri.split(':')[2]
+            );
+        });
+        document.querySelector('ul').append(res);
+    });
 };
 
 const displayPlaylists = (data) => {
     const results = data.items.map((item) => {
         return Playlist(item);
     });
-    document.querySelector('ul').innerHTML += results.join('');
+    results.forEach((res) => {
+        res.addEventListener('click', (e) => {
+            $spotifyEmbededPlayer.setAttribute(
+                'src',
+                'https://open.spotify.com/embed/playlist/' +
+                    e.target.dataset.uri.split(':')[2]
+            );
+        });
+        document.querySelector('ul').append(res);
+    });
 };
 
 const displayArtists = (data) => {
     const results = data.artists.items.map((item) => {
         return Artist(item);
     });
-    document.querySelector('ul').innerHTML += results.join('');
+    results.forEach((res) => {
+        res.addEventListener('click', (e) => {
+            $spotifyEmbededPlayer.setAttribute(
+                'src',
+                'https://open.spotify.com/embed/artist/' +
+                    e.target.dataset.uri.split(':')[2]
+            );
+        });
+        document.querySelector('ul').append(res);
+    });
 };
 
 const addToQueue = (e) => {
@@ -141,4 +174,18 @@ const loadNext = async (type, next) => {
         }
     }
     return newNext;
+};
+
+const newSearch = async (e) => {
+    document.querySelector('ul').innerHTML = '';
+    const selectedSearchType = document.querySelector(
+        'input[name="searchType"]:checked'
+    ).value;
+    const results = await searchSpotify($search.value, selectedSearchType);
+    if (selectedSearchType === 'artist') {
+        displayArtists(results);
+    } else {
+        displayTracks(results);
+    }
+    setLastReq(lastReq, 'search', results[selectedSearchType + 's'].next);
 };
