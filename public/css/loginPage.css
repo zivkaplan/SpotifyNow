@@ -9,7 +9,7 @@ body {
     margin: 0;
 }
 
-button {
+.login {
     background-color: var(--background-base, #ffffff);
     color: var(--text-base, #000000);
     border-radius: 500px;
@@ -19,7 +19,7 @@ button {
     font-weight: 700;
 }
 
-button:hover {
+.login:hover {
     transform: scale(1.04);
 }
 
