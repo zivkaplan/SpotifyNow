@@ -165,3 +165,25 @@ module.exports.refreshAccessToken = (user, spotifyAuth) => {
             return e;
         });
 };
+
+module.exports.recentlyPlayedRequest = async (user) => {
+    return axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/me/player/recently-played',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + user.token.access_token,
+        },
+        params: {
+            limit: 1,
+        },
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((e) => {
+            console.log(e.response);
+            return e;
+        });
+};

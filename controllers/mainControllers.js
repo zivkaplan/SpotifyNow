@@ -10,6 +10,7 @@ const {
     playlistsRequest,
     addToQueueRequest,
     loadNextReqeust,
+    recentlyPlayedRequest,
 } = require('../httpRequests');
 const { spotifyAuthConfig } = require('../configs/spotifyAuthConfig');
 spotifyAuth = spotifyAuthConfig();
@@ -63,13 +64,21 @@ module.exports.addToQueue = async (req, res) => {
     res.sendStatus(200);
 };
 
+module.exports.getRecentlyPlayed = async (req, res) => {
+    if (!req.session.sessionKey) return;
+    const user = await User.findOne({
+        sessionKey: req.session.sessionKey,
+    });
+    const response = await recentlyPlayedRequest(user);
+    res.send(response);
+};
+
 module.exports.loadNext = async (req, res) => {
     if (!req.session.sessionKey || !req.query.next) return;
     const user = await User.findOne({
         sessionKey: req.session.sessionKey,
     });
     const response = await loadNextReqeust(user, req.query.next);
-    // console.log(response);
     res.send(response);
 };
 

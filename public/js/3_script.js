@@ -10,6 +10,7 @@ const $spotifyEmbededPlayer = document.querySelector('.spotifyEmbededPlayer');
 const $spotifyEmbededPlayerWrapper = document.querySelector(
     '.spotifyEmbededPlayerWrapper'
 );
+const $arrow = document.querySelector('.arrow');
 
 const lastReq = {
     search: false,
@@ -18,6 +19,20 @@ const lastReq = {
     next: null,
     isFecthing: false,
 };
+window.addEventListener('load', async (e) => {
+    const result = await getRecentlyPlayed();
+    const lastTrackUrl =
+        'https://open.spotify.com/embed/' +
+        result.items[0].track.type +
+        '/' +
+        result.items[0].track.id;
+    $spotifyEmbededPlayer.setAttribute(
+        'src',
+        result.items[0].track.id
+            ? lastTrackUrl
+            : 'https://open.spotify.com/embed/track/7MAibcTli4IisCtbHKrGMh'
+    );
+});
 
 $searchTypeRadioBtns.forEach((btn) => {
     btn.addEventListener('change', newSearch);
@@ -95,8 +110,7 @@ $logoutBtn.addEventListener('click', async (e) => {
     }, 2000).then();
 });
 
-$arrow.addEventListener('click', (e) => {
-    console.log(1);
-    // if (!e.target.closest('div')) return;
-    // $spotifyEmbededPlayer.classList.toggle('openList');
+$spotifyEmbededPlayerWrapper.addEventListener('click', (e) => {
+    $spotifyEmbededPlayer.classList.toggle('openList');
+    $arrow.classList.toggle('open');
 });

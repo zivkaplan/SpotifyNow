@@ -110,30 +110,62 @@ button[disabled] {
     bottom: 0%;
     margin-bottom: 0;
     padding-bottom: 0;
-    background: linear-gradient(to bottom, transparent 80%, black 100%);
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        white 5%,
+        white 70%,
+        black 100%
+    );
 }
 
 .spotifyEmbededPlayer {
     width: 100vw;
     height: 80px;
+    transition: height 225ms ease;
 }
 
 .openList {
     height: 300px;
 }
-
-.arrow {
-    position: sticky;
-    top: -950px;
-    left: 50%;
-    width: 0px;
-    height: 0px;
-    margin-top: 23px;
-    border: 10px solid transparent;
-    margin-top: 21px;
-    border-top-color: black;
+.arrowWrapper {
+    width: 100%;
+    text-align: center;
+    padding-top: 15px;
+    background: linear-gradient(to bottom, transparent 0%, white 30%);
     transition: transform 200ms ease;
 }
-.open.arrow {
-    transform: rotate(180deg);
+.arrow {
+    display: inline-block;
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    padding: 5px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transition: transform 200ms ease;
+    transform: rotate(-135deg) translateY(-25%);
+}
+.open {
+    transform: rotate(45deg) translateY(-50%);
+}
+.arrowWrapper:hover {
+    transform: scale(1.2) translateY(-5px);
+}
+
+.btnDiv {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    margin: 0.5em 1em;
+}
+
+.searchDiv input[type='search'] {
+    display: block;
 }

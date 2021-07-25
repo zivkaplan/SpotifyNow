@@ -4,16 +4,26 @@
 <link rel="stylesheet" href="/css/loader.css" />
 
 <h1>Spotify Now</h1>
-<button class="btn logout">Logout</button>
-<h2>Hi <%= user.username %></h2>
-<button class="getAlbums">Get Albums</button>
-<button class="getPlaylists">Get Playlists</button>
-<input type="search" name="q" id="search" placeholder="Search" />
-<div>
-    <input type="radio" name="searchType" id="track" value="track" checked />
-    <label for="tracks">Tracks</label>
-    <input type="radio" name="searchType" id="artist" value="artist" />
-    <label for="artists">Artists</label>
+<h2>Welcome, <%= user.username %></h2>
+<div class="btnDiv">
+    <button class="btn btn-primary getAlbums">Show my saved albums</button>
+    <button class="btn btn-primary getPlaylists">
+        Show my saved Playlists
+    </button>
+    <div class="searchDiv">
+        <input type="search" name="q" id="search" placeholder="Search" />
+        <input
+            type="radio"
+            name="searchType"
+            id="tracks"
+            value="track"
+            checked
+        />
+        <label for="tracks">Tracks</label>
+        <input type="radio" name="searchType" id="artists" value="artist" />
+        <label for="artists">Artists</label>
+    </div>
+    <button class="btn btn-warning logout">Logout</button>
 </div>
 <ul class="search_results"></ul>
 
@@ -28,7 +38,9 @@
     <div class="blockG" id="rotateG_08"></div>
 </div>
 <div class="spotifyEmbededPlayerWrapper">
-    <span class="arrow"></span>
+    <div class="arrowWrapper">
+        <i class="arrow"></i>
+    </div>
     <iframe
         class="spotifyEmbededPlayer"
         frameborder="0"

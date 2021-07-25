@@ -49,6 +49,19 @@ const getPlaylists = async (e) => {
     return response.json();
 };
 
+const getRecentlyPlayed = async (e) => {
+    const url = new URL('http://localhost:3000/recentlyPlayed');
+    const config = {
+        method: 'get',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    };
+    const response = await fetch(url, config);
+    return response.json();
+};
+
 const displayTracks = (data) => {
     const results = data.tracks.items.map((item) => {
         return Track(item);
@@ -177,6 +190,7 @@ const loadNext = async (type, next) => {
 };
 
 const newSearch = async (e) => {
+    if (!$search.value) return;
     document.querySelector('ul').innerHTML = '';
     const selectedSearchType = document.querySelector(
         'input[name="searchType"]:checked'

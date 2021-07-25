@@ -9,6 +9,7 @@ module.exports.spotifyAuthConfig = () => {
         'playlist-read-private',
         'playlist-read-collaborative',
         'user-read-currently-playing',
+        'user-read-recently-played',
         'user-library-read',
         'user-modify-playback-state',
     ];

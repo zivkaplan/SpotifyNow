@@ -18,6 +18,11 @@ router.get('/playlists', isAuthenticated, mainControllers.getPlaylists);
 
 router.get('/addToQueue', isAuthenticated, mainControllers.addToQueue);
 
+router.get(
+    '/recentlyPlayed',
+    isAuthenticated,
+    mainControllers.getRecentlyPlayed
+);
 router.get('/next', isAuthenticated, mainControllers.loadNext);
 
 router.get('/', mainControllers.loggedInPage);
