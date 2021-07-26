@@ -130,6 +130,9 @@ module.exports.loggedInPage = async (req, res) => {
             req.session.sessionKey = userDetails.sessionKey;
             req.session.expires_in = user.token.expires_in;
         }
+        if (!user) {
+            redirect('/logout');
+        }
         res.render('loggedin', { user });
     } catch (e) {
         console.log(e);
