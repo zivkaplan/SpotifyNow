@@ -98,6 +98,7 @@ module.exports.loggedInPage = async (req, res) => {
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
             const userToken = response.data;
+            console.log(userToken);
             const userData = await detailsRequest(userToken.access_token);
             console.log('userData detailsReq');
             console.log(userData);
@@ -128,7 +129,7 @@ module.exports.loggedInPage = async (req, res) => {
                 user = new User(userDetails);
                 await user.save();
             }
-
+            console.log(user);
             req.session.activeSession = true;
             req.session.sessionKey = userDetails.sessionKey;
             req.session.expires_in = user.token.expires_in;
