@@ -22,7 +22,7 @@ mongooseConfig(dbUrl);
 const appConfig = (function () {
     const sessionConfig = {
         name: 'SessConnect',
-        secret: secret,
+        secret,
         resave: false,
         saveUninitialized: false,
         cookie: {
