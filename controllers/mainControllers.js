@@ -21,7 +21,7 @@ module.exports.loginToSpotify = (req, res) => {
 
 module.exports.logout = async (req, res) => {
     req.session.destroy();
-    res.redirect('/');
+    res.render('loginPage');
 };
 
 module.exports.getSearchResults = async (req, res) => {
@@ -85,13 +85,9 @@ module.exports.loadNext = async (req, res) => {
 module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
-        if (
-            !req.session.code ||
-            (!req.session.sessionKey && !req.session.activeSession)
-        ) {
-            req.session.destroy();
-            return res.render('loginPage');
-        } else if (req.session.sessionKey && req.session.activeSession) {
+        if (!req.query.code && !req.session.activeSession) {
+            return res.redirect('/logout');
+        } else if (req.session.activeSession) {
             // user already logged in - session active
             user = await User.findOne({
                 sessionKey: req.session.sessionKey,
