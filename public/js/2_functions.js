@@ -6,7 +6,7 @@ const setLastReq = (lastReq, value, next) => {
 };
 
 const searchSpotify = async (q, type) => {
-    const url = new URL('/search');
+    const url = new URL(baseUrl + '/search');
     const config = {
         method: 'POST',
         mode: 'cors',
@@ -24,7 +24,7 @@ const searchSpotify = async (q, type) => {
 };
 
 const getAlbums = async (e) => {
-    const url = new URL('/albums');
+    const url = new URL(baseUrl + '/albums');
     const config = {
         method: 'get',
         mode: 'cors',
@@ -50,7 +50,7 @@ const getPlaylists = async (e) => {
 };
 
 const getRecentlyPlayed = async (e) => {
-    const url = new URL('/recentlyPlayed');
+    const url = new URL(baseUrl + '/recentlyPlayed');
     const config = {
         method: 'get',
         mode: 'cors',
@@ -127,7 +127,7 @@ const displayArtists = (data) => {
 };
 
 const addToQueue = (e) => {
-    const url = new URL('/addToQueue');
+    const url = new URL(baseUrl + '/addToQueue');
     const config = {
         method: 'get',
         mode: 'cors',
@@ -151,7 +151,7 @@ const addToQueue = (e) => {
 
 const loadNext = async (type, next) => {
     const requestNext = async () => {
-        const url = new URL('/next');
+        const url = new URL(baseUrl + '/next');
         const config = {
             method: 'get',
             mode: 'cors',
