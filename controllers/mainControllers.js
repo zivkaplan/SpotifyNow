@@ -85,10 +85,10 @@ module.exports.loadNext = async (req, res) => {
 module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
-        if (!req.query.code && !req.session.activeSession) {
-            //if the user was not logged in and was not redirected from spotify
+        if (!req.session.activeSession) {
+            req.session.destroy();
             return res.render('loginPage');
-        } else if (req.session.activeSession) {
+        } else if (req.session.sessionKey) {
             // user already logged in - session active
             user = await User.findOne({
                 sessionKey: req.session.sessionKey,
