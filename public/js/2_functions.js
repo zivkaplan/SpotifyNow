@@ -197,7 +197,12 @@ const newSearch = async (e) => {
     ).value;
     const results = await searchSpotify($search.value, selectedSearchType);
     if (selectedSearchType === 'artist') {
-        displayArtists(results);
+    } else if (selectedSearchType === 'album') {
+        console.log(results);
+        displayAlbums(results.albums);
+    } else if (selectedSearchType === 'playlist') {
+        console.log(results);
+        displayPlaylists(results.playlists);
     } else {
         displayTracks(results);
     }

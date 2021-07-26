@@ -5,7 +5,22 @@ html {
     margin: 0;
     font-family: monospace;
 }
-
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+header > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+.logo {
+    height: 2rem;
+}
 main {
     display: flex;
     flex-direction: column;
@@ -165,8 +180,22 @@ button[disabled] {
 .btn {
     margin: 0.5em 1em;
 }
-
+.searchDiv {
+    margin: 0.5rem 1rem;
+}
+.searchDiv label {
+    margin-right: 10px;
+}
 .searchDiv input[type='search'] {
     display: block;
-    margin-bottom: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.radioBtnsDiv > * {
+    margin: 0.1em 0.3em;
+}
+.radioBtnsDiv {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }

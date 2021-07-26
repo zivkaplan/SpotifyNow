@@ -8,7 +8,7 @@
     text-align: center;
     margin: 0;
     width: 100%;
-    height: calc(100vh - 50px - 37px);
+    height: calc(100vh - 50px);
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -36,11 +36,17 @@ h1 {
 header {
     background-color: #000000;
     text-align: left;
+    padding: 10px;
 }
 
 .now {
     font-family: 'Yellowtail', cursive;
     text-transform: uppercase;
+}
+.exclamationPoint {
+    font-family: 'Yellowtail', cursive;
+    fill: var(--main_color);
+    font-size: 80px;
 }
 
 .logo {

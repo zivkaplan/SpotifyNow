@@ -2,28 +2,53 @@
 
 <link rel="stylesheet" href="/css/results.css" />
 <link rel="stylesheet" href="/css/loader.css" />
-
-<h1>Spotify Now</h1>
-<h2>Welcome, <%= user.username %></h2>
-<div class="btnDiv">
-    <div class="searchDiv">
-        <input type="search" name="q" id="search" placeholder="Search" />
-        <input
-            type="radio"
-            name="searchType"
-            id="tracks"
-            value="track"
-            checked
-        />
-        <label for="tracks">Tracks</label>
-        <input type="radio" name="searchType" id="artists" value="artist" />
-        <label for="artists">Artists</label>
+<header>
+    <div>
+        <img class="logo" src="/icons/logo.svg" alt="Spotify Now logo" />
+        <h1>Spotify Now</h1>
     </div>
+    <div>
+        <h2>Welcome, <%= user.username %></h2>
+        <button class="btn btn-warning logout">Logout</button>
+    </div>
+</header>
+<div class="btnDiv">
     <button class="btn btn-primary getAlbums">Show my saved albums</button>
     <button class="btn btn-primary getPlaylists">
         Show my saved Playlists
     </button>
-    <button class="btn btn-warning logout">Logout</button>
+</div>
+<div class="searchDiv">
+    <input type="search" name="q" id="search" placeholder="Search" />
+    <div class="radioBtnsDiv">
+        <div>
+            <input
+                type="radio"
+                name="searchType"
+                id="tracks"
+                value="track"
+                checked
+            />
+            <label for="tracks">Tracks</label>
+        </div>
+        <div>
+            <input type="radio" name="searchType" id="artists" value="artist" />
+            <label for="artists">Artists</label>
+        </div>
+        <div>
+            <input type="radio" name="searchType" id="albums" value="album" />
+            <label for="albums">Albums</label>
+        </div>
+        <div>
+            <input
+                type="radio"
+                name="searchType"
+                id="playlists"
+                value="playlist"
+            />
+            <label for="playlists">Playlists</label>
+        </div>
+    </div>
 </div>
 <ul class="search_results"></ul>
 

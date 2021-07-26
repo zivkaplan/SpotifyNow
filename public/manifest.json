@@ -1,0 +1,21 @@
+{
+    "manifest_version": 1,
+    "name": "Spofity Now",
+    "start_url": "/",
+    "version": "1.1",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff",
+    "icons": [
+        {
+            "src": "../icons/logo.svg",
+            "sizes": "any"
+        },
+        {
+            "src": "../icons/logo.png",
+            "type": "image/png",
+            "sizes": "239X159"
+        }
+    ],
+    "permissions": ["unlimitedStorage", "notifications"]
+}

@@ -36,7 +36,9 @@ module.exports.validateAccessToken = async (req, res, next) => {
             req.session.expires_in <= Date.now() + 120000
         ) {
             console.log('refreshing access token');
-            await updateAccessToken(req);
+            const newExpiration = await updateAccessToken(req);
+            req.session.expires_in = newExpiration;
+            console.log('Access Token Updated');
         }
         next();
     } catch (e) {
@@ -60,7 +62,8 @@ const updateAccessToken = async (req) => {
             user.token.refresh_token =
                 response.data.refresh_token || user.token.refresh_token;
 
-            return await user.save();
+            await user.save();
+            return user.token.expires_in;
         }
     } catch (e) {
         console.log(e);
