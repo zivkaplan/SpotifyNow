@@ -160,7 +160,7 @@ const loadNext = async (type, next) => {
             },
         };
 
-        const params = { next: next };
+        const params = { next };
         url.search = new URLSearchParams(params);
 
         const response = await fetch(url, config);
@@ -168,22 +168,27 @@ const loadNext = async (type, next) => {
     };
 
     const results = await requestNext();
-
     let newNext;
 
     if (type === 'albums') {
         newNext = results.next;
-        displayAlbums(results);
+        displayAlbums(results.albums);
     } else if (type === 'playlists') {
-        displayPlaylists(results);
         newNext = results.next;
+        displayPlaylists(results);
     } else if (type === 'search') {
         if (results.artists) {
-            displayArtists(results);
             newNext = results.artists.next;
+            displayArtists(results.artists);
+        } else if (results.albums) {
+            newNext = results.albums.next;
+            displayAlbums(results.albums);
+        } else if (results.playlists) {
+            newNext = results.playlists.next;
+            displayPlaylists(results.playlists);
         } else {
-            displayTracks(results);
             newNext = results.tracks.next;
+            displayTracks(results);
         }
     }
     return newNext;
@@ -197,11 +202,10 @@ const newSearch = async (e) => {
     ).value;
     const results = await searchSpotify($search.value, selectedSearchType);
     if (selectedSearchType === 'artist') {
+        displayArtists(results);
     } else if (selectedSearchType === 'album') {
-        console.log(results);
         displayAlbums(results.albums);
     } else if (selectedSearchType === 'playlist') {
-        console.log(results);
         displayPlaylists(results.playlists);
     } else {
         displayTracks(results);

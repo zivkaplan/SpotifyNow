@@ -39,6 +39,7 @@ const Playlist = (item) => {
         item.images?.[0]?.url || noImageAvailableUrl
     }">
     <span class="result artistName">${item.name}</span>
+    <span class="result albumName">playlist by ${item.owner.display_name}</span>
     </div>`;
     return listItem;
 };
