@@ -86,17 +86,24 @@ module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
         if (!req.query.code && !req.session.activeSession) {
+            //if the user was not logged in and was not redirected from spotify
             return res.redirect('/logout');
-        } else if (req.query.code) {
+        } else if (req.session.activeSession) {
+            // user already logged in - session active
+            user = await User.findOne({
+                sessionKey: req.session.sessionKey,
+            });
+        } else {
             //first login in to session user logged in and redirected from spofity
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
+            console.log('response tokenReq');
+            console.log(response);
             const userToken = response.data;
             const userData = await detailsRequest(userToken.access_token);
-            if (userData.status !== 200) {
-                console.log('userData error', userData);
-                return res.redirect('/logout');
-            }
+            console.log('userData detailsReq');
+            console.log(userData);
+
             const userDetails = {
                 username: userData.data.display_name,
                 spotify_id: userData.data.id,
@@ -127,13 +134,8 @@ module.exports.loggedInPage = async (req, res) => {
             req.session.activeSession = true;
             req.session.sessionKey = userDetails.sessionKey;
             req.session.expires_in = user.token.expires_in;
-        } else if (req.session.activeSession) {
-            // user already logged in - session active
-            user = await User.findOne({
-                sessionKey: req.session.sessionKey,
-            });
         }
-        return res.render('loggedin', { user });
+        res.render('loggedin', { user });
     } catch (e) {
         console.log(e);
         res.redirect('/logout');
