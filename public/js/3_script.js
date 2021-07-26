@@ -106,7 +106,7 @@ $logoutBtn.addEventListener('click', async (e) => {
 
     setTimeout(() => {
         spotifyLogoutWindow.close();
-        location.assign('/logout');
+        location.assign(baseUrl + '/logout');
     }, 2000).then();
 });
 

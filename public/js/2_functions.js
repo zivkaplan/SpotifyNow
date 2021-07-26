@@ -37,7 +37,7 @@ const getAlbums = async (e) => {
 };
 
 const getPlaylists = async (e) => {
-    const url = new URL('/playlists');
+    const url = new URL(baseUrl + '/playlists');
     const config = {
         method: 'get',
         mode: 'cors',
