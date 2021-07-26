@@ -86,6 +86,7 @@ module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
         if (!req.query.code && !req.session.activeSession) {
+            req.session.destroy();
             //if the user was not logged in and was not redirected from spotify
             return res.render('loginPage');
         } else if (req.session.activeSession) {
