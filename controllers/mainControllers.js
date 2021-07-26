@@ -85,8 +85,18 @@ module.exports.loadNext = async (req, res) => {
 module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
-        if (req.sessio.code) {
+        if (
+            !req.session.code ||
+            (req.session.sessionKey && req.session.activeSession)
+        ) {
             req.session.destroy();
+            return res.render('loginPage');
+        } else if (req.session.sessionKey && req.session.activeSession) {
+            // user already logged in - session active
+            user = await User.findOne({
+                sessionKey: req.session.sessionKey,
+            });
+        } else {
             //first login in to session user logged in and redirected from spofity
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
@@ -123,17 +133,8 @@ module.exports.loggedInPage = async (req, res) => {
             req.session.activeSession = true;
             req.session.sessionKey = userDetails.sessionKey;
             req.session.expires_in = user.token.expires_in;
-            res.render('loggedin', { user });
-        } else if (req.session.sessionKey) {
-            // user already logged in - session active
-            user = await User.findOne({
-                sessionKey: req.session.sessionKey,
-            });
-            res.render('loggedin', { user });
-        } else {
-            req.session.destroy();
-            return res.render('loginPage');
         }
+        res.render('loggedin', { user });
     } catch (e) {
         console.log(e);
         redirect('/logout');
