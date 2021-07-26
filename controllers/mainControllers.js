@@ -97,8 +97,6 @@ module.exports.loggedInPage = async (req, res) => {
             //first login in to session user logged in and redirected from spofity
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
-            console.log('response tokenReq');
-            console.log(response);
             const userToken = response.data;
             const userData = await detailsRequest(userToken.access_token);
             console.log('userData detailsReq');
