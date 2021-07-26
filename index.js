@@ -23,13 +23,13 @@ const appConfig = (function () {
     const sessionConfig = {
         name: 'SessConnect',
         secret,
-        resave: true,
+        resave: false,
         saveUninitialized: false,
         cookie: {
             expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
             maxAge: 1000 * 60 * 60 * 24 * 7,
             httpOnly: true,
-            secure: true,
+            // secure: true,
         },
         store: MongoStore.create({
             mongoUrl: dbUrl,

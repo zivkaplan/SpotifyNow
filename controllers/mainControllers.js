@@ -86,7 +86,6 @@ module.exports.loggedInPage = async (req, res) => {
     try {
         let user;
         if (!req.query.code && !req.session.activeSession) {
-            req.session.destroy();
             //if the user was not logged in and was not redirected from spotify
             return res.render('loginPage');
         } else if (req.session.activeSession) {
@@ -95,6 +94,7 @@ module.exports.loggedInPage = async (req, res) => {
                 sessionKey: req.session.sessionKey,
             });
         } else {
+            req.session.destroy();
             //first login in to session user logged in and redirected from spofity
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
