@@ -134,6 +134,6 @@ module.exports.loggedInPage = async (req, res) => {
         res.render('loggedin', { user });
     } catch (e) {
         console.log(e);
-        res.render('loginPage');
+        redirect('/logout');
     }
 };

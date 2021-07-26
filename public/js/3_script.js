@@ -11,7 +11,7 @@ const $spotifyEmbededPlayerWrapper = document.querySelector(
     '.spotifyEmbededPlayerWrapper'
 );
 const $arrow = document.querySelector('.arrow');
-
+const baseUrl = 'https://sleepy-plateau-12982.herokuapp.com';
 const lastReq = {
     search: false,
     albums: false,
@@ -106,7 +106,7 @@ $logoutBtn.addEventListener('click', async (e) => {
 
     setTimeout(() => {
         spotifyLogoutWindow.close();
-        location.assign('/logout');
+        location.assign(baseUrl + '/logout');
     }, 2000).then();
 });
 
