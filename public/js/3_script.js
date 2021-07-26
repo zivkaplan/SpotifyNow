@@ -49,11 +49,11 @@ $getAlbumsBtn.addEventListener('click', async (e) => {
         displayAlbums(results);
         setLastReq(lastReq, 'albums', results.next);
         $getAlbumsBtn.disabled = false;
-        $getAlbumsBtn.innerText = 'get Albums';
+        $getAlbumsBtn.innerText = 'Show my saved albums';
     } catch (e) {
         console.log(e);
         $getAlbumsBtn.disabled = false;
-        $getAlbumsBtn.innerText = 'get Albums';
+        $getAlbumsBtn.innerText = 'Show my saved albums';
     }
 });
 
@@ -66,11 +66,11 @@ $getPlaylistsBtn.addEventListener('click', async (e) => {
         displayPlaylists(results);
         setLastReq(lastReq, 'playlists', results.next);
         $getPlaylistsBtn.disabled = false;
-        $getPlaylistsBtn.innerText = 'Get Playlists';
+        $getPlaylistsBtn.innerText = 'Show my saved playlists';
     } catch (e) {
         console.log(e);
         $getPlaylistsBtn.disabled = false;
-        $getPlaylistsBtn.innerText = 'Get Playlists';
+        $getPlaylistsBtn.innerText = 'Show my saved playlists';
     }
 });
 
