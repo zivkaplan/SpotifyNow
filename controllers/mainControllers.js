@@ -92,50 +92,52 @@ module.exports.loggedInPage = async (req, res) => {
             user = await User.findOne({
                 sessionKey: req.session.sessionKey,
             });
+            res.render('loggedin', { user });
         } else {
             //first login in to session user logged in and redirected from spofity
             //send post request to Spotify
             const response = await tokenRequest(req.query.code, spotifyAuth);
             const userToken = response.data;
             const userData = await detailsRequest(userToken.access_token);
+            if (userData.status === 200) {
+                const userDetails = {
+                    username: userData.data.display_name,
+                    spotify_id: userData.data.id,
+                    image_url: userData.data.images?.[0]?.url
+                        ? userData.data.images[0].url
+                        : null,
+                    token: {
+                        access_token: userToken.access_token,
+                        token_type: userToken.token_type,
+                        expires_in: Date.now() + userToken.expires_in * 1000, //Date.now() is in milliseconds, spotify in seconds
+                        refresh_token: userToken.refresh_token,
+                        scope: userToken.scope,
+                    },
+                    sessionKey: uuidv4(),
+                };
 
-            const userDetails = {
-                username: userData.data.display_name,
-                spotify_id: userData.data.id,
-                image_url: userData.data.images?.[0]?.url
-                    ? userData.data.images[0].url
-                    : null,
-                token: {
-                    access_token: userToken.access_token,
-                    token_type: userToken.token_type,
-                    expires_in: Date.now() + userToken.expires_in * 1000, //Date.now() is in milliseconds, spotify in seconds
-                    refresh_token: userToken.refresh_token,
-                    scope: userToken.scope,
-                },
-                sessionKey: uuidv4(),
-            };
+                user = await User.findOneAndUpdate(
+                    { spotify_id: userData.data.id },
+                    userDetails,
+                    { new: true }
+                );
 
-            user = await User.findOneAndUpdate(
-                { spotify_id: userData.data.id },
-                userDetails,
-                { new: true }
-            );
+                if (!user) {
+                    user = new User(userDetails);
+                    await user.save();
+                }
 
-            if (!user) {
-                user = new User(userDetails);
-                await user.save();
+                req.session.activeSession = true;
+                req.session.sessionKey = userDetails.sessionKey;
+                req.session.expires_in = user.token.expires_in;
+                res.render('loggedin', { user });
             }
-
-            req.session.activeSession = true;
-            req.session.sessionKey = userDetails.sessionKey;
-            req.session.expires_in = user.token.expires_in;
         }
         if (!user) {
             res.redirect('/logout');
         }
-        res.render('loggedin', { user });
     } catch (e) {
         console.log(e);
-        redirect('/logout');
+        res.redirect('/logout');
     }
 };
