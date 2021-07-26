@@ -87,7 +87,7 @@ module.exports.loggedInPage = async (req, res) => {
         let user;
         if (
             !req.session.code ||
-            (req.session.sessionKey && req.session.activeSession)
+            (!req.session.sessionKey && !req.session.activeSession)
         ) {
             req.session.destroy();
             return res.render('loginPage');
