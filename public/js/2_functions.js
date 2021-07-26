@@ -179,7 +179,7 @@ const loadNext = async (type, next) => {
     } else if (type === 'search') {
         if (results.artists) {
             newNext = results.artists.next;
-            displayArtists(results.artists);
+            displayArtists(results);
         } else if (results.albums) {
             newNext = results.albums.next;
             displayAlbums(results.albums);
