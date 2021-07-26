@@ -171,6 +171,7 @@ const loadNext = async (type, next) => {
     let newNext;
 
     if (type === 'albums') {
+        console.log(results);
         newNext = results.next;
         displayAlbums(results.albums);
     } else if (type === 'playlists') {
