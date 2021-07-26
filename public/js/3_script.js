@@ -11,7 +11,6 @@ const $spotifyEmbededPlayerWrapper = document.querySelector(
     '.spotifyEmbededPlayerWrapper'
 );
 const $arrow = document.querySelector('.arrow');
-
 const lastReq = {
     search: false,
     albums: false,
@@ -106,7 +105,7 @@ $logoutBtn.addEventListener('click', async (e) => {
 
     setTimeout(() => {
         spotifyLogoutWindow.close();
-        location.assign('http://localhost:3000/logout');
+        location.assign('/logout');
     }, 2000).then();
 });
 
