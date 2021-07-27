@@ -91,7 +91,6 @@ module.exports.loggedInPage = async (req, res) => {
             const userToken = response.data;
 
             const userData = await detailsRequest(userToken.access_token);
-            console.log('userData detailsReq');
 
             const userDetails = {
                 username: userData.data.display_name,
