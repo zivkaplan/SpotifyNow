@@ -27,15 +27,15 @@ const appConfig = (function () {
         saveUninitialized: false,
         cookie: {
             expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-            maxAge: 1000 * 60 * 60 * 24 * 7,
+            maxAge: 60 * 60 * 24,
             httpOnly: true,
             // secure: true,
         },
         store: MongoStore.create({
             mongoUrl: dbUrl,
-            touchAfter: 24 * 60 * 60,
+            touchAfter: 60 * 60,
             crypto: {
-                secret: secret,
+                secret,
             },
         }),
     };
