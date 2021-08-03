@@ -1,7 +1,8 @@
 # SpotifyNow
 
 A small app made as an exrecise to practice web API.
-Sign in to your Spotify account, search for music and dusplay your library.
+
+Sign in to your Spotify account, search for music and display your library.
 
 up on Heroku: https://sleepy-plateau-12982.herokuapp.com/
 
